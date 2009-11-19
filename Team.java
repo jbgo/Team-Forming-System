@@ -20,7 +20,9 @@ class Team
 
 	public Student[] getStudents()
 	{
-		return members.toArray();
+		Student[] students = new Student[teamSize()];
+		students = members.toArray(students);
+		return students;
 	}
 }
 

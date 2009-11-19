@@ -27,11 +27,11 @@ class Student
 
 		if (obj != null && obj instanceof Student) {
 			Student student = (Student)obj;
-			if (firstName.equals(student.getFirstName()
-			        && lastName.equals(student.getLastName()
-				    && utdEmail.equals(student.getUtdEmail()
-					&& phoneNumber.equals(student.getPhoneNumber()
-					&& GPA == obj.getGPA()) {
+			if (firstName.equals(student.getFirstName())
+			        && lastName.equals(student.getLastName())
+				    && utdEmail.equals(student.getUtdEmail())
+					&& phoneNumber.equals(student.getPhoneNumber())
+					&& GPA == student.getGPA()) {
 				isEqual = true;
 			}
 		}

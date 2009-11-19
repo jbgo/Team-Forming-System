@@ -19,7 +19,7 @@ class Project
 	private String courseNumber;
 	private String projectName;
 	private int minTeamSize = Settings.DefaultTeamSize;
-	private AssignmentMethod = Settings.DefaultAssignmentMethod;
+	private AssignmentMethod assignMethod = Settings.DefaultAssignmentMethod;
 
 	private Vector<Student> students = new Vector<Student>();
 	private Vector<Team> teams = new Vector<Team>();
@@ -46,12 +46,16 @@ class Project
 
 	public Student[] getStudents()
 	{
-		return students.toArray();
+		Student[] arrStudent = new Student[students.size()];
+		arrStudent = students.toArray(arrStudent);
+		return arrStudent;
 	}
 
 	public Team[] getTeams()
 	{
-		return teams.toArray();
+		Team[] arrTeam = new Team[teams.size()];
+		arrTeam = teams.toArray(arrTeam);
+		return arrTeam;
 	}
 }
 

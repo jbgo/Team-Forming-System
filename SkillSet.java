@@ -23,7 +23,9 @@ class SkillSet
 
 	public Skill[] getSkills()
 	{
-		return skills.toArray();
+		Skill[] arrSkill = new Skill[skills.size()];
+		arrSkill = skills.toArray(arrSkill);
+		return arrSkill;
 	}
 }
 
