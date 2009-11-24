@@ -1,6 +1,6 @@
 import javax.swing.*;
 
-public class CreateProjectPanel extends JPanel
+public class CreateProjectPanel extends Screen
 {
 	private JTextField courseName;
 	private JTextField projectName;
@@ -12,7 +12,7 @@ public class CreateProjectPanel extends JPanel
 		BuildPanel();
 	}
 
-	public String getTitle()
+	public String getScreenTitle()
 	{
 		return "Create Project";
 	}

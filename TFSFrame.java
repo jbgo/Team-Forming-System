@@ -28,9 +28,10 @@ public class TFSFrame extends JFrame
 		statusBar.setText(message);
 	}
 
-	public void setScreen(JPanel screen)
+	public void setScreen(Screen screen)
 	{
 		contentPane.setViewportView(screen);
+		setTitle(screen.getScreenTitle());
 		pack();
 		setVisible(true);
 	}
@@ -46,10 +47,6 @@ public class TFSFrame extends JFrame
 		contentPane.setPreferredSize(new Dimension(600, 480));
 		add(contentPane, BorderLayout.CENTER);
 
-		JPanel emptyPanel = new JPanel();
-		emptyPanel.setPreferredSize(new Dimension(600, 880));
-		setScreen(emptyPanel);
-		
 		statusBar = new JTextField("...");
 		statusBar.setEditable(false);
 		add(statusBar, BorderLayout.SOUTH);
