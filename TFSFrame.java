@@ -93,7 +93,7 @@ public class TFSFrame extends JFrame
 	{
 		TFSFrame mainFrame = TFSFrame.getInstance();
 		mainFrame.setStatus("Welcome to the Team Forming System");
-		mainFrame.setScreen(new CreateProjectPanel());
+		mainFrame.setScreen(new CreateProjectScreen());
 	}
 }
 

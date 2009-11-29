@@ -2,14 +2,14 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
 
-public class CreateProjectPanel extends Screen implements ActionListener
+public class CreateProjectScreen extends Screen implements ActionListener
 {
 	private JTextField courseNumber;
 	private JTextField projectName;
 	private JButton createButton;
 	private CreateSkillsPanel skillsPanel;
 
-	public CreateProjectPanel()
+	public CreateProjectScreen()
 	{
 		initComponents();
 		BuildPanel();
