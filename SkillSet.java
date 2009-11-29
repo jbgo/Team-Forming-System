@@ -13,12 +13,9 @@ class SkillSet
 {
 	private Vector<Skill>skills = new Vector<Skill>();
 
-	public void addSkill(Skill skill)
+	public void add(Skill skill)
 	{
-	}
-
-	public void rateSkill(Skill skill, int rating)
-	{
+		skills.add(skill);
 	}
 
 	public Skill[] getSkills()
@@ -26,6 +23,26 @@ class SkillSet
 		Skill[] arrSkill = new Skill[skills.size()];
 		arrSkill = skills.toArray(arrSkill);
 		return arrSkill;
+	}
+
+	public Skill get(int index)
+	{
+		return skills.get(index);
+	}
+
+	public void set(int index, Skill skill)
+	{
+		skills.set(index, skill);
+	}
+
+	public void remove(Skill sk)
+	{
+		skills.remove(sk);
+	}
+
+	public int size()
+	{
+		return skills.size();
 	}
 }
 

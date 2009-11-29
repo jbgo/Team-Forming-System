@@ -18,11 +18,20 @@ class Project
 {
 	private String courseNumber;
 	private String projectName;
+	private SkillSet skillsetPrototype;
+
 	private int minTeamSize = Settings.DefaultTeamSize;
 	private AssignmentMethod assignMethod = Settings.DefaultAssignmentMethod;
 
 	private Vector<Student> students = new Vector<Student>();
 	private Vector<Team> teams = new Vector<Team>();
+
+	Project(String courseNumber, String projectName, SkillSet requiredSkills)
+	{
+		this.courseNumber = courseNumber;
+		this.projectName = projectName;
+		skillsetPrototype = requiredSkills;
+	}
 
 	public void addStudentToProject(Student student)
 	{

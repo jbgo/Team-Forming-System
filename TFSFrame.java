@@ -12,15 +12,27 @@ import java.awt.*;
 
 public class TFSFrame extends JFrame
 {
+	private static TFSFrame instance = null;
+
 	JScrollPane contentPane;
 	JTextField statusBar;
 
-	public TFSFrame()
+	// Implementing singleton design pattern, use TFSFrame.getInstance()
+	private TFSFrame()
 	{
 		BuildFrame();
 
 		pack();
 		setVisible(true);
+	}
+
+	public static TFSFrame getInstance()
+	{
+		if (instance == null) {
+			instance = new TFSFrame();
+		}
+
+		return instance;
 	}
 
 	public void setStatus(String message)
@@ -65,10 +77,10 @@ public class TFSFrame extends JFrame
 		JMenuItem menuExit = new JMenuItem("Exit");
 
 		fileMenu.add(menuNew);
-		fileMenu.add(menuOpen);
-		fileMenu.add(menuSave);
-		fileMenu.add(menuSaveAs);
-		fileMenu.add(menuClose);
+//		fileMenu.add(menuOpen);
+//		fileMenu.add(menuSave);
+//		fileMenu.add(menuSaveAs);
+//		fileMenu.add(menuClose);
 		fileMenu.addSeparator();
 		fileMenu.add(menuExit);
 
@@ -79,7 +91,7 @@ public class TFSFrame extends JFrame
 
 	public static void main(String[] args)
 	{
-		TFSFrame mainFrame = new TFSFrame();
+		TFSFrame mainFrame = TFSFrame.getInstance();
 		mainFrame.setStatus("Welcome to the Team Forming System");
 		mainFrame.setScreen(new CreateProjectPanel());
 	}
