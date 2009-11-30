@@ -11,6 +11,8 @@ teams containing those students.
 */
 
 import java.util.Vector;
+import java.util.Collections;
+import java.util.ArrayList;
 
 public abstract class TeamAssigner
 {
@@ -36,38 +38,150 @@ public abstract class TeamAssigner
 		return assigner;
 	}
 
-	abstract Vector<Team> assignTeams(Vector<Student> students, int minTeamSize);
+	abstract Vector<Team> assignTeams(Vector<Student> students, int minTeamSize) throws Exception;
 }
 
 class RandomAssigner extends TeamAssigner
 {
-	Vector<Team> assignTeams(Vector<Student> students, int minTeamSize)
+	Vector<Team> assignTeams(Vector<Student> students, int minTeamSize) throws Exception
 	{
-		return null;
+		int numTeams = students.size()/minTeamSize;
+		if (numTeams == 0)
+		{
+			throw new Exception("There are not enought students to construct even one team...");
+		}
+		ArrayList<Student> studentList = new ArrayList<Student>();
+		for(Student student : students)
+		{
+			studentList.add(student);
+		}
+		Collections.shuffle(studentList);
+		Vector<Team> teams = new Vector<Team>(numTeams);
+		for (int teamIndex=0; teamIndex<numTeams; teamIndex++)
+		{
+			teams.add(new Team());
+		}
+		int teamIndex = 0;
+		for (Student student: studentList)
+		{
+			teams.get(teamIndex).addStudent(student);
+			teamIndex++;
+			if (teamIndex==numTeams) {
+				teamIndex=0;
+			}
+		}
+		studentList.clear();
+		studentList=null;
+		
+		return teams;
 	}
 }
 
 class SimilarSkillsAssigner extends TeamAssigner
 {
-	Vector<Team> assignTeams(Vector<Student> students, int minTeamSize)
+	Vector<Team> assignTeams(Vector<Student> students, int minTeamSize) throws Exception
 	{
-		return null;
+		int numTeams = students.size()/minTeamSize;
+		if (numTeams == 0)
+		{
+			throw new Exception("There are not enought students to construct even one team...");
+		}
+		ArrayList<Student> studentList = new ArrayList<Student>();
+		for(Student student : students)
+		{
+			studentList.add(student);
+		}
+		Collections.shuffle(studentList);
+		Vector<Team> teams = new Vector<Team>(numTeams);
+		for (int teamIndex=0; teamIndex<numTeams; teamIndex++)
+		{
+			teams.add(new Team());
+		}
+		int teamIndex = 0;
+		for (Student student: studentList)
+		{
+			teams.get(teamIndex).addStudent(student);
+			teamIndex++;
+			if (teamIndex==numTeams) {
+				teamIndex=0;
+			}
+		}
+		studentList.clear();
+		studentList=null;
+		
+		return teams;
 	}
 }
 
 class SkillRangeAssigner extends TeamAssigner
 {
-	Vector<Team> assignTeams(Vector<Student> students, int minTeamSize)
+	Vector<Team> assignTeams(Vector<Student> students, int minTeamSize) throws Exception
 	{
-		return null;
+		int numTeams = students.size()/minTeamSize;
+		if (numTeams == 0)
+		{
+			throw new Exception("There are not enought students to construct even one team...");
+		}
+		ArrayList<Student> studentList = new ArrayList<Student>();
+		for(Student student : students)
+		{
+			studentList.add(student);
+		}
+		Collections.shuffle(studentList);
+		Vector<Team> teams = new Vector<Team>(numTeams);
+		for (int teamIndex=0; teamIndex<numTeams; teamIndex++)
+		{
+			teams.add(new Team());
+		}
+		int teamIndex = 0;
+		for (Student student: studentList)
+		{
+			teams.get(teamIndex).addStudent(student);
+			teamIndex++;
+			if (teamIndex==numTeams) {
+				teamIndex=0;
+			}
+		}
+		studentList.clear();
+		studentList=null;
+		
+		return teams;
 	}
 }
 
 class AverageGPAAssigner extends TeamAssigner
 {
-	Vector<Team> assignTeams(Vector<Student> students, int minTeamSize)
+	Vector<Team> assignTeams(Vector<Student> students, int minTeamSize) throws Exception
 	{
-		return null;
+		int numTeams = students.size()/minTeamSize;
+		if (numTeams == 0)
+		{
+			throw new Exception("There are not enought students to construct even one team...");
+		}
+		ArrayList<Student> studentList = new ArrayList<Student>();
+		for(Student student : students)
+		{
+			studentList.add(student);
+		}
+		Collections.shuffle(studentList);
+		Vector<Team> teams = new Vector<Team>(numTeams);
+		for (int teamIndex=0; teamIndex<numTeams; teamIndex++)
+		{
+			teams.add(new Team());
+		}
+		int teamIndex = 0;
+		for (Student student: studentList)
+		{
+			teams.get(teamIndex).addStudent(student);
+			teamIndex++;
+			if (teamIndex==numTeams) {
+				teamIndex=0;
+			}
+		}
+		studentList.clear();
+		studentList=null;
+		
+		return teams;
 	}
 }
 
