@@ -14,6 +14,11 @@ public class CSVReader
 		in = new Scanner(new File(infile));
 	}
 
+	public CSVReader(File infile) throws FileNotFoundException
+	{
+		in = new Scanner(infile);
+	}
+
 	// returns an array of column values for the next line of input
 	// or null if EOF has been reached or an error has occurred
 	public String[] nextLine()

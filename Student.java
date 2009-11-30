@@ -5,6 +5,7 @@ class Student
 	private String utdEmail;
 	private String phoneNumber;
 	private double GPA;
+	private int teamNumber;
 
 	// Default constructor
 	public Student() { }
@@ -91,6 +92,16 @@ class Student
 	public void setGPA(double GPA)
 	{
 		this.GPA = GPA;
+	}
+
+	public int getTeamNumber()
+	{
+		return teamNumber;
+	}
+
+	public void setTeamNumber(int value)
+	{
+		teamNumber = value;
 	}
 }
 

@@ -1,0 +1,55 @@
+import javax.swing.table.*;
+import java.util.Vector;
+
+public class StudentsTableModel extends AbstractTableModel
+{
+	Vector<Student> students = new Vector<Student>();
+	String[] columnNames = {
+		"Team #", "Last Name", "First Name", "UTD Email"
+	};
+
+	public StudentsTableModel()
+	{
+	}
+
+	public void addStudents(Vector<Student> studentList)
+	{
+		students.addAll(studentList);
+		fireTableDataChanged();
+	}
+
+	// overrides for AbstractTableModel methods
+
+	public int getRowCount()
+	{
+		return students.size();
+	}
+
+	public int getColumnCount()
+	{
+		return columnNames.length;
+	}
+
+	public Object getValueAt(int row, int column)
+	{
+		Student st = students.get(row);
+		switch (column) {
+			case 0:
+				return st.getTeamNumber();
+			case 1:
+				return st.getLastName();
+			case 2:
+				return st.getFirstName();
+			case 3:
+				return st.getUtdEmail();
+		}
+
+		return null;
+	}
+
+	public String getColumnName(int col)
+	{
+		return columnNames[col];
+	}
+}
+
