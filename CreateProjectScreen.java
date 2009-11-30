@@ -23,8 +23,10 @@ public class CreateProjectScreen extends Screen implements ActionListener
 			String projName = projectName.getText();
 			SkillSet skills = skillsPanel.getSkillSet();
 			Project proj = new Project(courseNo, projName, skills);
-			TFSFrame.getInstance().setStatus("Created project: " + projName);
-			// TODO: what to do after creating a project?
+
+			TFSFrame mainFrame = TFSFrame.getInstance();
+			mainFrame.setStatus("Created project: " + projName);
+			mainFrame.setScreen(new AssignTeamsScreen(proj));
 		}
 	}
 

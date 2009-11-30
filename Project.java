@@ -66,5 +66,15 @@ class Project
 		arrTeam = teams.toArray(arrTeam);
 		return arrTeam;
 	}
+
+	public String getName()
+	{
+		return projectName;
+	}
+
+	public void setName(String value)
+	{
+		projectName = value;
+	}
 }
 
