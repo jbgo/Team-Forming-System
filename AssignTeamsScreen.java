@@ -5,6 +5,7 @@ import java.io.FileNotFoundException;
 import java.util.Vector;
 import javax.swing.*;
 import javax.swing.filechooser.FileFilter;
+import javax.swing.table.*;
 
 public class AssignTeamsScreen extends Screen implements ActionListener
 {
@@ -122,6 +123,8 @@ class StudentsPanel extends JPanel implements ActionListener
 		addStudent.addActionListener(this);
 		removeStudents.addActionListener(this);
 
+		setColumnWidths(table);
+
 		JScrollPane scrollPane = new JScrollPane(table);
 		scrollPane.setPreferredSize(new Dimension(560, 200));
 
@@ -144,6 +147,19 @@ class StudentsPanel extends JPanel implements ActionListener
 		Object source = e.getSource();
 		if (source == addStudent) {
 		} else if (source == removeStudents) {
+		}
+	}
+
+	private void setColumnWidths(JTable table)
+	{
+		TableColumn col;
+		for (int i = 0; i < model.getColumnCount(); ++i) {
+			col = table.getColumnModel().getColumn(i);
+			if (i == 0) {
+				col.setPreferredWidth(50);
+			} else {
+				col.setPreferredWidth(150);
+			}
 		}
 	}
 }

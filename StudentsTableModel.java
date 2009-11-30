@@ -35,7 +35,8 @@ public class StudentsTableModel extends AbstractTableModel
 		Student st = students.get(row);
 		switch (column) {
 			case 0:
-				return st.getTeamNumber();
+				int teamNo = st.getTeamNumber();
+				return (teamNo == 0) ? "-" : teamNo;
 			case 1:
 				return st.getLastName();
 			case 2:
