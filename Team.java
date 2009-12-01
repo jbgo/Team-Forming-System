@@ -12,6 +12,14 @@ class Team
 	public void removeStudent(Student student)
 	{
 	}
+	
+	public void setTeamNumber(int teamNumber)
+	{
+		for(Student s : members)
+		{
+			s.setTeamNumber(teamNumber);
+		}
+	}
 
 	public int teamSize()
 	{
