@@ -13,9 +13,36 @@ teams containing those students.
 import java.util.Vector;
 import java.util.Collections;
 import java.util.ArrayList;
+import java.util.Comparator;
 
 public abstract class TeamAssigner
 {
+	public static void main(String[] args)
+	{
+		ArrayList<Student> l = new ArrayList<Student>(2);
+		Student a = new Student("Joseph", "Copenhaver", "JPC062000@utdallas.edu", "8178749074", 3.4);
+		a.addSkill(new Skill("Java", 1, 3));
+		a.addSkill(new Skill("Singing", 1, 2));
+		
+		Student b = new Student("_Joseph_", "_Copenhaver_", "_JPC062000@utdallas.edu_", "_8178749074_", 2.4);
+		b.addSkill(new Skill("Java", 1, 4));
+		b.addSkill(new Skill("Singing", 1, 3));
+		
+		Student c = new Student("#Joseph#", "_Copenhaver_", "_JPC062000@utdallas.edu_", "_8178749074_", 2.4);
+		c.addSkill(new Skill("Java", 1, 5));
+		c.addSkill(new Skill("Singing", 1, 5));
+		l.add(c);
+		l.add(b);
+		l.add(a);
+		Collections.sort(l, new StudentBySkillRange());
+		for(Student student : l)
+		{
+			System.out.println(student.getFirstName());
+			System.out.println(student.getRatingSum());
+		}
+	}
+	
+	
 	public static TeamAssigner getInstance(AssignmentMethod method)
 	{
 		TeamAssigner assigner = null;
@@ -37,7 +64,7 @@ public abstract class TeamAssigner
 
 		return assigner;
 	}
-
+	
 	abstract Vector<Team> assignTeams(Vector<Student> students, int minTeamSize) throws Exception;
 }
 
@@ -49,6 +76,17 @@ class RandomAssigner extends TeamAssigner
 		if (numTeams == 0)
 		{
 			throw new Exception("There are not enought students to construct even one team...");
+		}
+		if (numTeams == 1)
+		{
+			Vector<Team> dumbTeams = new Vector<Team>(numTeams);
+			Team t = new Team();
+			for(Student s : students)
+			{
+				t.addStudent(s);
+			}
+			dumbTeams.add(t);
+			return dumbTeams;
 		}
 		ArrayList<Student> studentList = new ArrayList<Student>();
 		for(Student student : students)
@@ -86,25 +124,48 @@ class SimilarSkillsAssigner extends TeamAssigner
 		{
 			throw new Exception("There are not enought students to construct even one team...");
 		}
+		if (numTeams == 1)
+		{
+			Vector<Team> dumbTeams = new Vector<Team>(numTeams);
+			Team t = new Team();
+			for(Student s : students)
+			{
+				t.addStudent(s);
+			}
+			dumbTeams.add(t);
+			return dumbTeams;
+		}
 		ArrayList<Student> studentList = new ArrayList<Student>();
 		for(Student student : students)
 		{
 			studentList.add(student);
 		}
-		Collections.shuffle(studentList);
+		Collections.sort(studentList, new StudentBySimilarSkill());
 		Vector<Team> teams = new Vector<Team>(numTeams);
 		for (int teamIndex=0; teamIndex<numTeams; teamIndex++)
 		{
 			teams.add(new Team());
 		}
-		int teamIndex = 0;
+		int studentCounter = 0;
 		for (Student student: studentList)
 		{
-			teams.get(teamIndex).addStudent(student);
-			teamIndex++;
-			if (teamIndex==numTeams) {
-				teamIndex=0;
+			int largestDist = 0;
+			Team addingTo = null;
+			int validTeamSize = studentCounter/numTeams;
+			for(Team t : teams)
+			{
+				if (t.teamSize() == validTeamSize)
+				{
+					int tDist = t.getWeightedRatingAverageTotal(student);
+					if (tDist > largestDist)
+					{
+						largestDist = tDist;
+						addingTo = t;
+					}
+				}
 			}
+			addingTo.addStudent(student);
+			studentCounter++;
 		}
 		studentList.clear();
 		studentList=null;
@@ -122,30 +183,52 @@ class SkillRangeAssigner extends TeamAssigner
 		{
 			throw new Exception("There are not enought students to construct even one team...");
 		}
-		ArrayList<Student> studentList = new ArrayList<Student>();
+		if (numTeams == 1)
+		{
+			Vector<Team> dumbTeams = new Vector<Team>(numTeams);
+			Team t = new Team();
+			for(Student s : students)
+			{
+				t.addStudent(s);
+			}
+			dumbTeams.add(t);
+			return dumbTeams;
+		}
+		ArrayList<Student> studentList = new ArrayList<Student>(students.size());
 		for(Student student : students)
 		{
 			studentList.add(student);
 		}
-		Collections.shuffle(studentList);
-		Vector<Team> teams = new Vector<Team>(numTeams);
+		Collections.sort(studentList, new StudentBySkillRange());
+		ArrayList<Team> teams = new ArrayList<Team>(numTeams);
 		for (int teamIndex=0; teamIndex<numTeams; teamIndex++)
 		{
 			teams.add(new Team());
 		}
-		int teamIndex = 0;
-		for (Student student: studentList)
+		Vector<Student> top = new Vector<Student>(numTeams);
+		int lastVal = studentList.size() - 1;
+		Comparator<Team> comp = new TeamByRatingSumI();
+		for (int index = 0; index <= lastVal; index++)
 		{
-			teams.get(teamIndex).addStudent(student);
-			teamIndex++;
-			if (teamIndex==numTeams) {
-				teamIndex=0;
+			top.add(studentList.get(index));
+			
+			if (top.size() == numTeams || index == lastVal)
+			{
+				int teamIndex = 0;
+				for(Student s : top)
+				{
+					teams.get(teamIndex).addStudent(s);
+					teamIndex++;
+				}
+				top.clear();
+				if (index != lastVal)
+				{
+					Collections.sort(teams, comp);
+				}
 			}
 		}
-		studentList.clear();
-		studentList=null;
 		
-		return teams;
+		return new Vector<Team>(teams);
 	}
 }
 
@@ -158,30 +241,119 @@ class AverageGPAAssigner extends TeamAssigner
 		{
 			throw new Exception("There are not enought students to construct even one team...");
 		}
-		ArrayList<Student> studentList = new ArrayList<Student>();
+
+		ArrayList<Student> studentList = new ArrayList<Student>(students.size());
+		
 		for(Student student : students)
 		{
 			studentList.add(student);
 		}
-		Collections.shuffle(studentList);
-		Vector<Team> teams = new Vector<Team>(numTeams);
+		Collections.sort(studentList, new StudentByGPA());
+		
+		ArrayList<Team> teams = new ArrayList<Team>(numTeams);
 		for (int teamIndex=0; teamIndex<numTeams; teamIndex++)
 		{
 			teams.add(new Team());
 		}
-		int teamIndex = 0;
-		for (Student student: studentList)
+		Vector<Student> top = new Vector<Student>(numTeams);
+		int lastVal = studentList.size() - 1;
+		Comparator<Team> comp = new TeamByGPASumI();
+		for (int index = 0; index <= lastVal; index++)
 		{
-			teams.get(teamIndex).addStudent(student);
-			teamIndex++;
-			if (teamIndex==numTeams) {
-				teamIndex=0;
+			top.add(studentList.get(index));
+			
+			if (top.size() == numTeams || index == lastVal)
+			{
+				int teamIndex = 0;
+				for(Student s : top)
+				{
+					teams.get(teamIndex).addStudent(s);
+					teamIndex++;
+				}
+				top.clear();
+				if (index != lastVal)
+				{
+					Collections.sort(teams, comp);
+				}
 			}
 		}
-		studentList.clear();
-		studentList=null;
 		
-		return teams;
+		return new Vector<Team>(teams);
+	}
+}
+
+class StudentByGPA implements Comparator<Student>
+{
+	public int compare(Student a, Student b)
+	{
+		int compValue = 0;
+		double gpaA = a.getGPA();
+		double gpaB = b.getGPA();
+		if (gpaA != gpaB)
+		{
+			compValue = (gpaA > gpaB) ? -1 : 1;
+		}
+		return compValue;
+ 	}
+} 
+
+class StudentBySkillRange implements Comparator<Student>
+{
+	public int compare(Student a, Student b)
+	{
+		int compValue = 0;
+		double skillTotalA = a.getRatingSum();
+		double skillTotalB = b.getRatingSum();
+		if (skillTotalA != skillTotalB)
+		{
+			compValue = (skillTotalA > skillTotalB) ? -1 : 1;
+		}
+		return compValue;
+ 	}
+}
+
+class StudentBySimilarSkill implements Comparator<Student>
+{
+	public int compare(Student a, Student b)
+	{
+		int compValue = 0;
+		int aveA = a.getWeightedRatingAverage();
+		int aveB = b.getWeightedRatingAverage();
+		if (aveA != aveB)
+		{
+			compValue = (aveA > aveB) ? -1 : 1;
+		}
+		return compValue;
+	}
+}
+
+class TeamByRatingSumI implements Comparator<Team>
+{
+	public int compare(Team a, Team b)
+	{
+		int compValue = 0;
+		int sumA = a.getWeightedRatingSum();
+		int sumB = b.getWeightedRatingSum();
+		if (sumA != sumB)
+		{
+			compValue = (sumA < sumB) ? -1 : 1;
+		}
+		return compValue;
+	}
+}
+
+class TeamByGPASumI implements Comparator<Team>
+{
+	public int compare(Team a, Team b)
+	{
+		int compValue = 0;
+		int sumA = a.getGPASum();
+		int sumB = b.getGPASum();
+		if (sumA != sumB)
+		{
+			compValue = (sumA < sumB) ? -1 : 1;
+		}
+		return compValue;
 	}
 }
 

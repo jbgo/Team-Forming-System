@@ -12,17 +12,19 @@ import java.util.Vector;
 class SkillSet
 {
 	private Vector<Skill>skills = new Vector<Skill>();
+	//private HashMap<Skill,Integer> skills = new HashMap<Skill,Integer>();
 
 	public void add(Skill skill)
 	{
+		//skills.put(skill, rating);
+		//if the skill already exists, then the key is over written
 		skills.add(skill);
 	}
 
 	public Skill[] getSkills()
 	{
-		Skill[] arrSkill = new Skill[skills.size()];
-		arrSkill = skills.toArray(arrSkill);
-		return arrSkill;
+		Skill[] arrSkills = new Skill[skills.size()];
+		return skills.toArray(arrSkills);
 	}
 
 	public Skill get(int index)
@@ -30,19 +32,62 @@ class SkillSet
 		return skills.get(index);
 	}
 
-	public void set(int index, Skill skill)
+	public void set(int index, Skill sk)
 	{
-		skills.set(index, skill);
+		skills.set(index, sk);
+	}
+	
+	public int getRatingSum()
+	{
+		int sum = 0;
+		for (Skill sk : skills)
+		{
+			int x = sk.getRating();
+			if (x > 0)
+			{
+				sum += x;
+			}
+		}
+		return sum;
+	}
+	
+	public int getWeightedRatingSum()
+	{
+		int sum = 0;
+		for(Skill sk : skills)
+		{
+			int rating = sk.getRating();
+			if (rating > 0)
+			{
+				sum += sk.getWeight() * rating;
+			}
+		}
+		return sum;
+	}
+	
+	public int getRatingAverage()
+	{
+		return getRatingSum()/skills.size();
+	}
+
+	public int getWeightedRatingAverage()
+	{
+		return getWeightedRatingSum()/skills.size();
 	}
 
 	public void remove(Skill sk)
 	{
 		skills.remove(sk);
 	}
+	
+	public void remove(int index)
+	{
+		skills.remove(index);
+	}
 
 	public int size()
 	{
 		return skills.size();
 	}
+	
 }
-

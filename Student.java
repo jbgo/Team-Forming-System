@@ -6,6 +6,7 @@ class Student
 	private String phoneNumber;
 	private double GPA;
 	private int teamNumber;
+	private SkillSet skillSet;
 
 	// Default constructor
 	public Student() { }
@@ -19,6 +20,7 @@ class Student
 		this.utdEmail = utdEmail;
 		this.phoneNumber = phoneNumber;
 		this.GPA = GPA;
+		this.skillSet = new SkillSet();
 	}
 
 	// Two students are equal only if all of their attributes are equal.
@@ -103,5 +105,56 @@ class Student
 	{
 		teamNumber = value;
 	}
+	
+	public void addSkill(Skill skill)
+	{
+		skillSet.add(skill);
+	}
+	
+	public void setSkill(int index, Skill skill)
+	{
+		skillSet.set(index, skill);
+	}
+	
+	public void removeSkill(Skill skill)
+	{
+		skillSet.remove(skill);
+	}
+	
+	public Skill[] getSkills()
+	{
+		return skillSet.getSkills();
+	}
+	
+	public Skill getSkill(int index)
+	{
+		return skillSet.get(index);
+	}
+	
+	public int getRatingSum()
+	{
+		return skillSet.getRatingSum();
+	}
+	
+	public int getWeightedRatingSum()
+	{
+		return skillSet.getWeightedRatingSum();
+	}
+	
+	public int getRatingAverage()
+	{
+		return skillSet.getRatingAverage();
+	}
+	
+	public int getWeightedRatingAverage()
+	{
+		return skillSet.getWeightedRatingAverage();
+	}
+	
+	public int getNumSkills()
+	{
+		return skillSet.size();
+	}
+	
 }
 
