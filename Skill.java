@@ -2,7 +2,7 @@ class Skill
 {
 	private String skillName;
 	private int weight = 1;
-	private int rating = -1; // -1 implies not rated
+	private int rating = -1;
 
 	public Skill()
 	{
@@ -12,6 +12,14 @@ class Skill
 	{
 		skillName = name;
 		this.weight = weight;
+		this.rating = rating;
+	}
+
+	public Skill(String name, int weight, int rating)
+	{
+		skillName = name;
+		this.weight = weight;
+		this.rating = rating;
 	}
 
 	public String getSkillName()
@@ -36,19 +44,15 @@ class Skill
 		}
 		weight = value;
 	}
-
+	
 	public int getRating()
 	{
 		return rating;
 	}
-
-	// value must be in the range [1, 5]
-	public void setRating(int value)
+	
+	public void setRating(int rating)
 	{
-		if (value < 1 || value > 5) {
-			throw new RuntimeException("rating must be between 1 and 5 inclusive");
-		}
-		rating = value;
+		this.rating = rating;
 	}
 }
 
