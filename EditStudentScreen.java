@@ -17,6 +17,8 @@ public class EditStudentScreen extends Screen implements ActionListener
 	JTextField phoneField = new JTextField();
 	JTextField GPAField = new JTextField();
 
+	boolean isNewStudent = false;
+
 	JButton updateButton;
 	JButton cancelButton = new JButton("Cancel");
 
@@ -25,7 +27,9 @@ public class EditStudentScreen extends Screen implements ActionListener
 		mainFrame = TFSFrame.getInstance();
 		parentScreen = parent;
 		student = st;
-		initComponents(isNewStudent);
+		this.isNewStudent = isNewStudent;
+
+		initComponents();
 		buildPanel();
 
 		if (!isNewStudent) {
@@ -44,9 +48,14 @@ public class EditStudentScreen extends Screen implements ActionListener
 
 		if (source == updateButton && saveStudentData()) {
 			Project proj = mainFrame.getCurrentProject();
-			proj.addStudent(student);
+
+			if (isNewStudent) {
+				proj.addStudent(student);
+			}
+
 			parentScreen.reloadData(proj);
 			mainFrame.setScreen(parentScreen);
+
 		} else if (source == cancelButton) {
 			mainFrame.setScreen(parentScreen);
 		}
@@ -114,7 +123,7 @@ public class EditStudentScreen extends Screen implements ActionListener
 		return isValid;
 	}
 
-	private void initComponents(boolean isNewStudent)
+	private void initComponents()
 	{
 		if (isNewStudent) {
 			updateButton = new JButton("Add");
