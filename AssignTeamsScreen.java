@@ -11,6 +11,7 @@ public class AssignTeamsScreen extends Screen implements ActionListener
 	private JComboBox teamSizeCombo;
 	private JComboBox assignMethodCombo;
 	private StudentsPanel studentPanel;
+	private TFSFrame mainFrame;
 
 	private String[] assignMethods = {
 		"Random", "Similar skills", "Range of skills", "Average GPA"
@@ -19,6 +20,7 @@ public class AssignTeamsScreen extends Screen implements ActionListener
 	AssignTeamsScreen(Project proj)
 	{
 		project = proj;
+		mainFrame = TFSFrame.getInstance();
 
 		initComponents();
 		buildPanel();
@@ -26,7 +28,7 @@ public class AssignTeamsScreen extends Screen implements ActionListener
 
 	public void initComponents()
 	{
-		studentPanel = new StudentsPanel(project.getStudents());
+		studentPanel = new StudentsPanel(this, project.getStudents());
 
 		teamSizeCombo = new JComboBox();
 		updateTeamSize();
@@ -88,14 +90,16 @@ public class AssignTeamsScreen extends Screen implements ActionListener
 
 class StudentsPanel extends JPanel implements ActionListener
 {
+	Screen parentScreen;
 	JButton addStudent = new JButton("Add");
 	JButton editStudent = new JButton("Edit");
 	JButton removeStudents = new JButton("Remove");
 	StudentsTableModel model;
 	JTable table;
 
-	StudentsPanel(Vector<Student> students)
+	StudentsPanel(Screen parent, Vector<Student> students)
 	{
+		parentScreen = parent;
 		model = new StudentsTableModel(students);
 		table = new JTable(model);
 
@@ -131,7 +135,10 @@ class StudentsPanel extends JPanel implements ActionListener
 	public void actionPerformed(ActionEvent e)
 	{
 		Object source = e.getSource();
+		TFSFrame mainFrame = TFSFrame.getInstance();
 		if (source == addStudent) {
+			Student s = new Student();
+			mainFrame.setScreen(new EditStudentScreen(parentScreen, s, true));
 		} else if (source == editStudent) {
 		} else if (source == removeStudents) {
 		}

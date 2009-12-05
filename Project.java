@@ -52,8 +52,9 @@ class Project
 		skillsetPrototype = requiredSkills;
 	}
 
-	public void addStudentToProject(Student student)
+	public void addStudent(Student st)
 	{
+		students.add(st);
 	}
 
 	public void addStudents(Vector<Student> st)
