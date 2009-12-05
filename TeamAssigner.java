@@ -29,7 +29,7 @@ public abstract class TeamAssigner
 			case SKILLS_SIMILAR:
 				assigner = new SimilarSkillsAssigner();
 				break;
-			case SKILLS_RANDOM:
+			case SKILLS_RANGE:
 				assigner = new SkillRangeAssigner();
 				break;
 			case AVERAGE_GPA:

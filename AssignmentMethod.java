@@ -1,7 +1,7 @@
 enum AssignmentMethod {
 	RANDOM,
 	SKILLS_SIMILAR,
-	SKILLS_RANDOM,
+	SKILLS_RANGE,
 	AVERAGE_GPA
 }
 
