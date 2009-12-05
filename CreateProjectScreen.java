@@ -8,9 +8,11 @@ public class CreateProjectScreen extends Screen implements ActionListener
 	private JTextField projectName;
 	private JButton createButton;
 	private CreateSkillsPanel skillsPanel;
+	private TFSFrame mainFrame;
 
 	public CreateProjectScreen()
 	{
+		mainFrame = TFSFrame.getInstance();
 		initComponents();
 		BuildPanel();
 	}
@@ -19,12 +21,16 @@ public class CreateProjectScreen extends Screen implements ActionListener
 	{
 		if (e.getSource() == createButton) {
 			// TODO: validate data
+
+			Project proj = mainFrame.getCurrentProject();
 			String courseNo = courseNumber.getText();
 			String projName = projectName.getText();
 			SkillSet skills = skillsPanel.getSkillSet();
-			Project proj = new Project(courseNo, projName, skills);
+			proj.setCourseNumber(courseNo);
+			proj.setProjectName(projName);
+			proj.setRequiredSkills(skills);
 
-			TFSFrame mainFrame = TFSFrame.getInstance();
+			mainFrame.setCurrentProject(proj);
 			mainFrame.setStatus("Created project: " + projName);
 			mainFrame.setScreen(new AssignTeamsScreen(proj));
 		}

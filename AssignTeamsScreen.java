@@ -1,10 +1,7 @@
 import java.awt.*;
 import java.awt.event.*;
-import java.io.File;
-import java.io.FileNotFoundException;
 import java.util.Vector;
 import javax.swing.*;
-import javax.swing.filechooser.FileFilter;
 import javax.swing.table.*;
 
 public class AssignTeamsScreen extends Screen implements ActionListener
@@ -29,8 +26,6 @@ public class AssignTeamsScreen extends Screen implements ActionListener
 
 	public void initComponents()
 	{
-		importButton = new JButton("Import Students");
-		importButton.addActionListener(this);
 		studentPanel = new StudentsPanel(project.getStudents());
 
 		teamSizeCombo = new JComboBox();
@@ -46,7 +41,6 @@ public class AssignTeamsScreen extends Screen implements ActionListener
 		col.add(teamSizeCombo);
 		col.add(new JLabel("Assignment method"));
 		col.add(assignMethodCombo);
-		col.add(importButton);
 		col.add(studentPanel);
 		add(col);
 	}
@@ -56,13 +50,16 @@ public class AssignTeamsScreen extends Screen implements ActionListener
 		return "Assign Students to Teams";
 	}
 
+	public void reloadData(Project proj)
+	{
+		project = proj;
+		updateTeamSize();
+		studentPanel.reloadData();
+	}
+
 	public void actionPerformed(ActionEvent e)
 	{
 		Object source = e.getSource();
-		if (source == importButton) {
-			importStudents();
-			updateTeamSize();
-		}
 	}
 
 	private void updateTeamSize()
@@ -86,66 +83,6 @@ public class AssignTeamsScreen extends Screen implements ActionListener
 		for (int i = 0; i < assignMethods.length; i++) {
 			assignMethodCombo.addItem(assignMethods[i]);
 		}
-	}
-
-	private void importStudents() {
-		TFSFrame mainFrame = TFSFrame.getInstance();
-		File csvFile = getCSVFile();
-		if (csvFile == null) {
-			mainFrame.setStatus("Import students: no file selected");
-			return;
-		}
-
-		CSVReader csv;
-		try {
-			csv = new CSVReader(csvFile);
-		} catch (FileNotFoundException ex) {
-			mainFrame.setStatus("Error: file not found: " + csvFile.getName());
-			return;
-		}
-
-		Vector<Student> students = new Vector<Student>();
-		while (csv.hasNextLine()) {
-			String[] fields = csv.nextLine();
-			Student s = new Student();
-			s.setLastName(fields[0]);
-			s.setFirstName(fields[1]);
-			s.setUtdEmail(fields[2] + "@utdallas.edu");
-			students.add(s);
-		}
-		csv.close();
-
-		studentPanel.addStudents(students);
-	}
-
-	private File getCSVFile() {
-		JFileChooser chooser = new JFileChooser();
-
-		// only show CSV files
-		chooser.setFileFilter(new FileFilter() {
-			public boolean accept(File f) {
-				if (f.isDirectory()) {
-					return true;
-				}
-
-				if (f.getName().endsWith(".csv")) {
-					return true;
-				} else {
-					return false;
-				}
-			}
-
-			public String getDescription() {
-				return "CSV files";
-			}
-		});
-
-		int status = chooser.showOpenDialog(this);
-		if (status == JFileChooser.APPROVE_OPTION) {
-			return chooser.getSelectedFile();
-		}
-
-		return null;
 	}
 }
 
@@ -186,10 +123,16 @@ class StudentsPanel extends JPanel implements ActionListener
 		model.addStudents(students);
 	}
 
+	public void reloadData()
+	{
+		model.fireTableDataChanged();
+	}
+
 	public void actionPerformed(ActionEvent e)
 	{
 		Object source = e.getSource();
 		if (source == addStudent) {
+		} else if (source == editStudent) {
 		} else if (source == removeStudents) {
 		}
 	}

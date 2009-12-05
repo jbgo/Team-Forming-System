@@ -26,6 +26,10 @@ class Project
 	private Vector<Student> students = new Vector<Student>();
 	private Vector<Team> teams = new Vector<Team>();
 
+	Project()
+	{
+	}
+
 	Project(String courseNumber, String projectName, SkillSet requiredSkills)
 	{
 		this.courseNumber = courseNumber;
@@ -33,8 +37,28 @@ class Project
 		skillsetPrototype = requiredSkills;
 	}
 
+	public void setCourseNumber(String courseNumber)
+	{
+		this.courseNumber = courseNumber;
+	}
+
+	public void setProjectName(String projectName)
+	{
+		this.projectName = projectName;
+	}
+
+	public void setRequiredSkills(SkillSet requiredSkills)
+	{
+		skillsetPrototype = requiredSkills;
+	}
+
 	public void addStudentToProject(Student student)
 	{
+	}
+
+	public void addStudents(Vector<Student> st)
+	{
+		students.addAll(st);
 	}
 
 	public void removeStudentFromProject(Student student)
