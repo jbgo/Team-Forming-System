@@ -53,11 +53,14 @@ class Project
 	{
 	}
 
-	public Student[] getStudents()
+	public int getNumStudents()
 	{
-		Student[] arrStudent = new Student[students.size()];
-		arrStudent = students.toArray(arrStudent);
-		return arrStudent;
+		return students.size();
+	}
+
+	public Vector<Student> getStudents()
+	{
+		return students;
 	}
 
 	public Team[] getTeams()

@@ -11,7 +11,13 @@ public class AssignTeamsScreen extends Screen implements ActionListener
 {
 	private Project project;
 	private JButton importButton;
+	private JComboBox teamSizeCombo;
+	private JComboBox assignMethodCombo;
 	private StudentsPanel studentPanel;
+
+	private String[] assignMethods = {
+		"Random", "Similar skills", "Range of skills", "Average GPA"
+	};
 
 	AssignTeamsScreen(Project proj)
 	{
@@ -25,13 +31,21 @@ public class AssignTeamsScreen extends Screen implements ActionListener
 	{
 		importButton = new JButton("Import Students");
 		importButton.addActionListener(this);
-		studentPanel = new StudentsPanel();
+		studentPanel = new StudentsPanel(project.getStudents());
+
+		teamSizeCombo = new JComboBox();
+		updateTeamSize();
+		assignMethodCombo = new JComboBox();
+		initAssignMethodCombo();
 	}
 
 	public void buildPanel()
 	{
 		JPanel col = GuiHelpers.column();
-		col.add(new JLabel("Assign Teams"));
+		col.add(new JLabel("Team size"));
+		col.add(teamSizeCombo);
+		col.add(new JLabel("Assignment method"));
+		col.add(assignMethodCombo);
 		col.add(importButton);
 		col.add(studentPanel);
 		add(col);
@@ -47,6 +61,30 @@ public class AssignTeamsScreen extends Screen implements ActionListener
 		Object source = e.getSource();
 		if (source == importButton) {
 			importStudents();
+			updateTeamSize();
+		}
+	}
+
+	private void updateTeamSize()
+	{
+		teamSizeCombo.removeAllItems();
+
+		int numStudents = project.getNumStudents();
+		if (numStudents < 4) {
+			return;
+		}
+
+		int high = numStudents / 2;
+		int low = numStudents / high;
+		for (int i = low; i <= high; i++) {
+			teamSizeCombo.addItem(i);
+		}
+	}
+
+	private void initAssignMethodCombo()
+	{
+		for (int i = 0; i < assignMethods.length; i++) {
+			assignMethodCombo.addItem(assignMethods[i]);
 		}
 	}
 
@@ -113,14 +151,19 @@ public class AssignTeamsScreen extends Screen implements ActionListener
 
 class StudentsPanel extends JPanel implements ActionListener
 {
-	JButton addStudent = new JButton("Add student");
-	JButton removeStudents = new JButton("Remove students");
-	StudentsTableModel model = new StudentsTableModel();
-	JTable table = new JTable(model);
+	JButton addStudent = new JButton("Add");
+	JButton editStudent = new JButton("Edit");
+	JButton removeStudents = new JButton("Remove");
+	StudentsTableModel model;
+	JTable table;
 
-	StudentsPanel()
+	StudentsPanel(Vector<Student> students)
 	{
+		model = new StudentsTableModel(students);
+		table = new JTable(model);
+
 		addStudent.addActionListener(this);
+		editStudent.addActionListener(this);
 		removeStudents.addActionListener(this);
 
 		setColumnWidths(table);
@@ -130,6 +173,7 @@ class StudentsPanel extends JPanel implements ActionListener
 
 		JPanel buttons = GuiHelpers.row();
 		buttons.add(addStudent);
+		buttons.add(editStudent);
 		buttons.add(removeStudents);
 
 		setLayout(new BorderLayout());

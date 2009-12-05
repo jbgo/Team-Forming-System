@@ -3,13 +3,14 @@ import java.util.Vector;
 
 public class StudentsTableModel extends AbstractTableModel
 {
-	Vector<Student> students = new Vector<Student>();
+	Vector<Student> students;
 	String[] columnNames = {
 		"Team #", "Last Name", "First Name", "UTD Email"
 	};
 
-	public StudentsTableModel()
+	public StudentsTableModel(Vector<Student> students)
 	{
+		this.students = students;
 	}
 
 	public void addStudents(Vector<Student> studentList)
