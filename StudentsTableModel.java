@@ -3,6 +3,8 @@ import java.util.Vector;
 
 public class StudentsTableModel extends AbstractTableModel
 {
+	public final static long serialVersionUID = 1L;
+
 	Vector<Student> students;
 	String[] columnNames = {
 		"Team #", "Last Name", "First Name", "UTD Email"

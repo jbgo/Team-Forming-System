@@ -5,6 +5,8 @@ import java.util.regex.*;
 
 public class EditStudentScreen extends Screen implements ActionListener
 {
+	public final static long serialVersionUID = 1L;
+
 	Student student;
 	Screen parentScreen;
 	TFSFrame mainFrame;
@@ -150,5 +152,6 @@ public class EditStudentScreen extends Screen implements ActionListener
 
 class SkillSetPanel extends JPanel
 {
+	public final static long serialVersionUID = 1L;
 }
 

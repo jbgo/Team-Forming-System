@@ -2,6 +2,8 @@ import javax.swing.table.*;
 
 public class CreateSkillsTableModel extends AbstractTableModel
 {
+	public final static long serialVersionUID = 1L;
+
 	SkillSet skills;
 
 	CreateSkillsTableModel ()

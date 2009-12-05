@@ -17,6 +17,8 @@ import java.io.FileNotFoundException;
 
 public class TFSFrame extends JFrame implements ActionListener
 {
+	public final static long serialVersionUID = 1L;
+
 	private static TFSFrame instance = null;
 
 	private Project currentProject;

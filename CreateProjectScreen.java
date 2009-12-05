@@ -4,6 +4,8 @@ import java.awt.event.*;
 
 public class CreateProjectScreen extends Screen implements ActionListener
 {
+	public final static long serialVersionUID = 1L;
+
 	private JTextField courseNumber;
 	private JTextField projectName;
 	private JButton createButton;
@@ -85,6 +87,8 @@ public class CreateProjectScreen extends Screen implements ActionListener
 
 class CreateSkillsPanel extends JPanel implements ActionListener
 {
+	public final static long serialVersionUID = 1L;
+
 	JButton addSkill = new JButton("Add skill");
 	JButton removeSkill = new JButton("Remove skills");
 	CreateSkillsTableModel model = new CreateSkillsTableModel();

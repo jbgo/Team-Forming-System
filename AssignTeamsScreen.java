@@ -6,6 +6,7 @@ import javax.swing.table.*;
 
 public class AssignTeamsScreen extends Screen implements ActionListener
 {
+	public final static long serialVersionUID = 1L;
 	private Project project;
 	private JButton importButton;
 	private JComboBox teamSizeCombo;
@@ -90,6 +91,8 @@ public class AssignTeamsScreen extends Screen implements ActionListener
 
 class StudentsPanel extends JPanel implements ActionListener
 {
+	public final static long serialVersionUID = 1L;
+
 	Screen parentScreen;
 	JButton addStudent = new JButton("Add");
 	JButton editStudent = new JButton("Edit");
