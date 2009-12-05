@@ -17,8 +17,6 @@ public class EditStudentScreen extends Screen implements ActionListener
 	JTextField phoneField = new JTextField();
 	JTextField GPAField = new JTextField();
 
-	SkillSetPanel skillsPanel;
-
 	JButton updateButton;
 	JButton cancelButton = new JButton("Cancel");
 
@@ -143,6 +141,12 @@ public class EditStudentScreen extends Screen implements ActionListener
 		tempColumn.add(GPAField);
 		tempColumn.add(updateButton);
 		tempColumn.add(cancelButton);
+		
+		Skill[] skills = student.getSkills();
+		for (int i = 0; i < skills.length; i++) {
+			tempColumn.add(new SkillPanel(skills[i]));
+		}
+
 		add(tempColumn);
 	}
 
@@ -156,8 +160,55 @@ public class EditStudentScreen extends Screen implements ActionListener
 	}
 }
 
-class SkillSetPanel extends JPanel
+class SkillPanel extends JPanel implements ActionListener
 {
 	public final static long serialVersionUID = 1L;
+
+	Skill skill;
+	ButtonGroup buttons;
+	JRadioButton[] radios = new JRadioButton[5];
+
+	SkillPanel(Skill skill)
+	{
+		this.skill = skill;
+		initComponents();
+		buildPanel();
+	}
+
+	public void actionPerformed(ActionEvent e)
+	{
+		int rating = Integer.parseInt(e.getActionCommand());
+		skill.setRating(rating);
+	}
+
+	private void initComponents()
+	{
+		buttons = new ButtonGroup();
+		for (int i = 0; i < radios.length; i++) {
+			String label = String.valueOf(i+1);
+			radios[i] = new JRadioButton(label);
+			radios[i].setActionCommand(label);
+			radios[i].addActionListener(this);
+			buttons.add(radios[i]);
+		}
+
+		int rating = skill.getRating();
+		if (rating != -1) {
+			buttons.setSelected(radios[rating-1].getModel(), true);
+		}
+	}
+
+	private void buildPanel()
+	{
+		JPanel row = GuiHelpers.row();
+		row.add(new JLabel(skill.getSkillName() + ": "));
+		row.add(Box.createHorizontalGlue());
+
+		for (int i = 0; i < radios.length; i++) {
+			row.add(radios[i]);
+		}
+
+		add(row);
+	}
 }
 

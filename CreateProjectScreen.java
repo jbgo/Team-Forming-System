@@ -32,6 +32,11 @@ public class CreateProjectScreen extends Screen implements ActionListener
 			proj.setProjectName(projName);
 			proj.setRequiredSkills(skills);
 
+			// add skillset to each student
+			for (Student s : proj.getStudents()) {
+				s.setSkillSet(new SkillSet(skills));
+			}
+
 			mainFrame.setCurrentProject(proj);
 			mainFrame.setStatus("Created project: " + projName);
 			mainFrame.setScreen(new AssignTeamsScreen(proj));

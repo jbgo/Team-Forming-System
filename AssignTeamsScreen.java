@@ -141,6 +141,7 @@ class StudentsPanel extends JPanel implements ActionListener
 		TFSFrame mainFrame = TFSFrame.getInstance();
 		if (source == addStudent) {
 			Student s = new Student();
+			s.setSkillSet(mainFrame.getCurrentProject().getRequiredSkills());
 			mainFrame.setScreen(new EditStudentScreen(parentScreen, s, true));
 		} else if (source == editStudent) {
 			int index = table.getSelectedRow();

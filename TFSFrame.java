@@ -175,12 +175,20 @@ public class TFSFrame extends JFrame implements ActionListener
 		}
 
 		Vector<Student> students = new Vector<Student>();
+
+		if (csv.hasNextLine()) {
+			csv.nextLine(); // skip header row
+		}
+
 		while (csv.hasNextLine()) {
 			String[] fields = csv.nextLine();
 			Student s = new Student();
 			s.setLastName(fields[0]);
 			s.setFirstName(fields[1]);
 			s.setUtdEmail(fields[2] + "@utdallas.edu");
+			if (currentProject != null) {
+				s.setSkillSet(currentProject.getRequiredSkills());
+			}
 			students.add(s);
 		}
 		csv.close();

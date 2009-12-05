@@ -14,6 +14,16 @@ class SkillSet
 	private Vector<Skill>skills = new Vector<Skill>();
 	//private HashMap<Skill,Integer> skills = new HashMap<Skill,Integer>();
 
+	public SkillSet() { }
+
+	// copy constructor
+	public SkillSet(SkillSet ss)
+	{
+		for (Skill sk : ss.getSkills()) {
+			skills.add(new Skill(sk));
+		}
+	}
+
 	public void add(Skill skill)
 	{
 		//skills.put(skill, rating);

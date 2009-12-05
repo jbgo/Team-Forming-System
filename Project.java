@@ -47,6 +47,11 @@ class Project
 		this.projectName = projectName;
 	}
 
+	public SkillSet getRequiredSkills()
+	{
+		return new SkillSet(skillsetPrototype);
+	}
+
 	public void setRequiredSkills(SkillSet requiredSkills)
 	{
 		skillsetPrototype = requiredSkills;

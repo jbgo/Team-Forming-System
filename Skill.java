@@ -8,6 +8,14 @@ class Skill
 	{
 	}
 
+	// copy constructor
+	public Skill(Skill sk)
+	{
+		this.skillName = sk.getSkillName();
+		this.weight = sk.getWeight();
+		this.rating = sk.getRating();
+	}
+
 	public Skill(String name, int weight)
 	{
 		skillName = name;

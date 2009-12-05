@@ -130,6 +130,16 @@ class Student
 	{
 		return skillSet.get(index);
 	}
+
+	public SkillSet getSkillSet()
+	{
+		return skillSet;
+	}
+
+	public void setSkillSet(SkillSet ss)
+	{
+		skillSet = ss;
+	}
 	
 	public int getRatingSum()
 	{
