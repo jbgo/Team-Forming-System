@@ -77,8 +77,9 @@ public class EditStudentScreen extends Screen implements ActionListener
 			isValid = false;
 		}
 
+		// optional
 		String phone = phoneField.getText().trim();
-		if (!Pattern.matches("^\\d{10,}$", phone)) {
+		if (!phone.isEmpty() && !Pattern.matches("^\\d{10,}$", phone)) {
 			errorMessages += "Phone numbers may only contain numbers and must be at least 10 digits long.\n";
 			isValid = false;
 		}
@@ -147,6 +148,11 @@ public class EditStudentScreen extends Screen implements ActionListener
 
 	private void prePopulateFields()
 	{
+		lastNameField.setText(student.getLastName());
+		firstNameField.setText(student.getFirstName());
+		emailField.setText(student.getUtdEmail());
+		phoneField.setText(student.getPhoneNumber());
+		GPAField.setText(String.valueOf(student.getGPA()));
 	}
 }
 

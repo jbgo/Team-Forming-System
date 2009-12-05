@@ -143,6 +143,9 @@ class StudentsPanel extends JPanel implements ActionListener
 			Student s = new Student();
 			mainFrame.setScreen(new EditStudentScreen(parentScreen, s, true));
 		} else if (source == editStudent) {
+			int index = table.getSelectedRow();
+			Student s = model.getStudentForRow(index);
+			mainFrame.setScreen(new EditStudentScreen(parentScreen, s, false));
 		} else if (source == removeStudents) {
 		}
 	}

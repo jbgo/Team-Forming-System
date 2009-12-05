@@ -21,6 +21,11 @@ public class StudentsTableModel extends AbstractTableModel
 		fireTableDataChanged();
 	}
 
+	public Student getStudentForRow(int row)
+	{
+		return students.get(row);
+	}
+
 	// overrides for AbstractTableModel methods
 
 	public int getRowCount()
