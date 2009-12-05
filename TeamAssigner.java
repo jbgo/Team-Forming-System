@@ -17,31 +17,6 @@ import java.util.Comparator;
 
 public abstract class TeamAssigner
 {
-	public static void main(String[] args)
-	{
-		ArrayList<Student> l = new ArrayList<Student>(2);
-		Student a = new Student("Joseph", "Copenhaver", "JPC062000@utdallas.edu", "8178749074", 3.4);
-		a.addSkill(new Skill("Java", 1, 3));
-		a.addSkill(new Skill("Singing", 1, 2));
-		
-		Student b = new Student("_Joseph_", "_Copenhaver_", "_JPC062000@utdallas.edu_", "_8178749074_", 2.4);
-		b.addSkill(new Skill("Java", 1, 4));
-		b.addSkill(new Skill("Singing", 1, 3));
-		
-		Student c = new Student("#Joseph#", "_Copenhaver_", "_JPC062000@utdallas.edu_", "_8178749074_", 2.4);
-		c.addSkill(new Skill("Java", 1, 5));
-		c.addSkill(new Skill("Singing", 1, 5));
-		l.add(c);
-		l.add(b);
-		l.add(a);
-		Collections.sort(l, new StudentBySkillRange());
-		for(Student student : l)
-		{
-			System.out.println(student.getFirstName());
-			System.out.println(student.getRatingSum());
-		}
-	}
-	
 	
 	public static TeamAssigner getInstance(AssignmentMethod method)
 	{
@@ -150,7 +125,7 @@ class SimilarSkillsAssigner extends TeamAssigner
 		for (Student student: studentList)
 		{
 			int largestDist = 0;
-			Team addingTo = null;
+			Team teamToAddTo = null;
 			int validTeamSize = studentCounter/numTeams;
 			for(Team t : teams)
 			{
@@ -160,11 +135,11 @@ class SimilarSkillsAssigner extends TeamAssigner
 					if (tDist > largestDist)
 					{
 						largestDist = tDist;
-						addingTo = t;
+						teamToAddTo = t;
 					}
 				}
 			}
-			addingTo.addStudent(student);
+			teamToAddTo.addStudent(student);
 			studentCounter++;
 		}
 		studentList.clear();
@@ -240,6 +215,17 @@ class AverageGPAAssigner extends TeamAssigner
 		if (numTeams == 0)
 		{
 			throw new Exception("There are not enought students to construct even one team...");
+		}
+		if (numTeams == 1)
+		{
+			Vector<Team> dumbTeams = new Vector<Team>(numTeams);
+			Team t = new Team();
+			for(Student s : students)
+			{
+				t.addStudent(s);
+			}
+			dumbTeams.add(t);
+			return dumbTeams;
 		}
 
 		ArrayList<Student> studentList = new ArrayList<Student>(students.size());
