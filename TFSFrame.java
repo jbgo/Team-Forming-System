@@ -67,6 +67,11 @@ public class TFSFrame extends JFrame implements ActionListener
 		setVisible(true);
 	}
 
+	public void showError(String message)
+	{
+		JOptionPane.showMessageDialog(this, message, "Error", JOptionPane.ERROR_MESSAGE);
+	}
+
 	public Project getCurrentProject()
 	{
 		if (currentProject == null) {
