@@ -143,7 +143,7 @@ public class TFSFrame extends JFrame implements ActionListener
 		importMenu.add(menuImportStudents);
 		importMenu.add(menuImportRatings);
 
-		fileMenu.add(menuNew);
+		//fileMenu.add(menuNew);
 		fileMenu.add(importMenu);
 //		fileMenu.add(menuOpen);
 //		fileMenu.add(menuSave);
