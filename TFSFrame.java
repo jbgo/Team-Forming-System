@@ -30,7 +30,8 @@ public class TFSFrame extends JFrame implements ActionListener
 		"First Name",
 		"User ID",
 		"Role",
-		"GPA"
+		"GPA",
+		"Phone Number"
 	};
 	
 	private Project currentProject;
@@ -289,6 +290,13 @@ public class TFSFrame extends JFrame implements ActionListener
 				}
 				s.setGPA(GPA);
 				//System.out.println(GPA);
+			}
+			//OPTIONAL!
+			
+			index = fieldLocations.get(validUserHeaders[5]);
+			if (index > -1)
+			{
+				s.setPhoneNumber(fields[index]);
 			}
 			//OPTIONAL!
 
