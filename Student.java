@@ -9,7 +9,9 @@ class Student
 	private SkillSet skillSet;
 
 	// Default constructor
-	public Student() { }
+	public Student() {
+		this.skillSet = new SkillSet();
+		}
 
 	// Convenience constructor
 	public Student(String firstName, String lastName, String utdEmail,
@@ -163,6 +165,5 @@ class Student
 	{
 		return skillSet.size();
 	}
-	
 }
 

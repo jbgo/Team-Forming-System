@@ -100,4 +100,14 @@ class SkillSet
 		return skills.size();
 	}
 	
+	public String[] getNames()
+	{
+		String[] names = new String[skills.size()];
+		for(int index = 0; index < names.length; index++)
+		{
+			names[index] = skills.get(index).getSkillName();
+		}
+		return names;
+	}
 }
+
