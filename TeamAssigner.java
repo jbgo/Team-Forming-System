@@ -124,7 +124,7 @@ class SimilarSkillsAssigner extends TeamAssigner
 		int studentCounter = 0;
 		for (Student student: studentList)
 		{
-			int largestDist = 0;
+			int largestDist = -1;
 			Team teamToAddTo = null;
 			int validTeamSize = studentCounter/numTeams;
 			for(Team t : teams)
