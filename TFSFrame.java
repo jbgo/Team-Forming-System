@@ -197,7 +197,6 @@ public class TFSFrame extends JFrame implements ActionListener
 			if (fields[2].matches("[@]")) {
 				s.setUtdEmail(fields[2]);
 			} else {
-				System.out.println("WOOT");
 				s.setUtdEmail(fields[2] + emailSuffix);
 			}
 

@@ -8,7 +8,7 @@ public class AssignTeamsScreen extends Screen implements ActionListener
 {
 	public final static long serialVersionUID = 1L;
 	private Project project;
-	private JButton importButton;
+	private JButton assignButton;
 	private JComboBox teamSizeCombo;
 	private JComboBox assignMethodCombo;
 	private StudentsPanel studentPanel;
@@ -33,8 +33,12 @@ public class AssignTeamsScreen extends Screen implements ActionListener
 
 		teamSizeCombo = new JComboBox();
 		updateTeamSize();
+
 		assignMethodCombo = new JComboBox();
 		initAssignMethodCombo();
+
+		assignButton = new JButton("Assign Teams");
+		assignButton.addActionListener(this);
 	}
 
 	public void buildPanel()
@@ -44,6 +48,7 @@ public class AssignTeamsScreen extends Screen implements ActionListener
 		col.add(teamSizeCombo);
 		col.add(new JLabel("Assignment method"));
 		col.add(assignMethodCombo);
+		col.add(assignButton);
 		col.add(studentPanel);
 		add(col);
 	}
@@ -63,6 +68,55 @@ public class AssignTeamsScreen extends Screen implements ActionListener
 	public void actionPerformed(ActionEvent e)
 	{
 		Object source = e.getSource();
+		if (source == assignButton) {
+			doTeamAssignments();
+		}
+	}
+
+	public void doTeamAssignments()
+	{
+		AssignmentMethod method;
+		TeamAssigner assigner;
+
+		if (project.getNumStudents() < 4) {
+			mainFrame.showError("A project must have at least 4 students to assign teams.");
+			return;
+		}
+
+		AssignmentMethod[] methodTypes = {
+			AssignmentMethod.RANDOM, AssignmentMethod.SKILLS_SIMILAR,
+			AssignmentMethod.SKILLS_RANGE, AssignmentMethod.AVERAGE_GPA
+		};
+
+		int methodIndex = assignMethodCombo.getSelectedIndex();
+		method = methodTypes[methodIndex];
+		project.setAssignmentMethod(method);
+
+		int minTeamSize = (Integer)teamSizeCombo.getSelectedItem();
+		project.setMinTeamSize(minTeamSize);
+
+		assigner = TeamAssigner.getInstance(method);
+		Vector<Team> newTeams = null;
+		try {
+			newTeams = assigner.assignTeams(project.getStudents(), minTeamSize);
+		} catch (Exception ex) {
+			mainFrame.showError(ex.getMessage());
+			return;
+		}
+
+		project.removeAllStudents();
+		for (int i = 0; i < newTeams.size(); i++) {
+			Team team = newTeams.get(i);
+			team.setTeamNumber(i + 1);
+			for (Student st : team.getStudents()) {
+				project.addStudent(st);
+			}
+		}
+
+		mainFrame.setStatus(newTeams.size() + " teams assigned according to the " 
+				+ assignMethods[methodIndex] + " algorithm");
+
+		reloadData(project);
 	}
 
 	public void updateTeamSize()
@@ -128,6 +182,11 @@ class StudentsPanel extends JPanel implements ActionListener
 	public void addStudents(Vector<Student> students)
 	{
 		model.addStudents(students);
+	}
+
+	public void setStudents(Vector<Student> students)
+	{
+		model.setStudents(students);
 	}
 
 	public void reloadData()

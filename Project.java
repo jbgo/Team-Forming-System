@@ -68,6 +68,11 @@ class Project
 		students.addAll(st);
 	}
 
+	public void removeAllStudents()
+	{
+		students.removeAllElements();
+	}
+
 	public void removeStudentFromProject(Student student)
 	{
 	}
@@ -121,5 +126,14 @@ class Project
 		skillsetPrototype.add(s);
 	}
 	
+	public void setMinTeamSize(int size)
+	{
+		minTeamSize = size;
+	}
+
+	public void setAssignmentMethod(AssignmentMethod method)
+	{
+		assignMethod = method;
+	}
 }
 
