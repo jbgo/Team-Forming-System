@@ -65,7 +65,7 @@ public class AssignTeamsScreen extends Screen implements ActionListener
 		Object source = e.getSource();
 	}
 
-	private void updateTeamSize()
+	public void updateTeamSize()
 	{
 		teamSizeCombo.removeAllItems();
 
@@ -93,14 +93,14 @@ class StudentsPanel extends JPanel implements ActionListener
 {
 	public final static long serialVersionUID = 1L;
 
-	Screen parentScreen;
+	AssignTeamsScreen parentScreen;
 	JButton addStudent = new JButton("Add");
 	JButton editStudent = new JButton("Edit");
 	JButton removeStudents = new JButton("Remove");
 	StudentsTableModel model;
 	JTable table;
 
-	StudentsPanel(Screen parent, Vector<Student> students)
+	StudentsPanel(AssignTeamsScreen parent, Vector<Student> students)
 	{
 		parentScreen = parent;
 		model = new StudentsTableModel(students);
@@ -143,11 +143,14 @@ class StudentsPanel extends JPanel implements ActionListener
 			Student s = new Student();
 			s.setSkillSet(mainFrame.getCurrentProject().getRequiredSkills());
 			mainFrame.setScreen(new EditStudentScreen(parentScreen, s, true));
+			parentScreen.updateTeamSize();
 		} else if (source == editStudent) {
 			int index = table.getSelectedRow();
 			Student s = model.getStudentForRow(index);
 			mainFrame.setScreen(new EditStudentScreen(parentScreen, s, false));
 		} else if (source == removeStudents) {
+			model.removeSelectedStudents(table.getSelectedRows());
+			parentScreen.updateTeamSize();
 		}
 	}
 

@@ -32,14 +32,12 @@ class Student
 			Student student = (Student)obj;
 			if (firstName.equals(student.getFirstName())
 			        && lastName.equals(student.getLastName())
-				    && utdEmail.equals(student.getUtdEmail())
-					&& phoneNumber.equals(student.getPhoneNumber())
-					&& GPA == student.getGPA()) {
+				    && utdEmail.equals(student.getUtdEmail())) {
 				isEqual = true;
 			}
 		}
 
-		return true;
+		return isEqual;
 	}
 
 	/*

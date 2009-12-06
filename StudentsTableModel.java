@@ -26,6 +26,20 @@ public class StudentsTableModel extends AbstractTableModel
 		return students.get(row);
 	}
 
+	public void removeSelectedStudents(int[] rows)
+	{
+		Student[] st = new Student[rows.length];
+		for (int i = 0; i < rows.length; ++i) {
+			st[i] = students.get(rows[i]);
+		}
+
+		for (int i = 0; i < st.length; ++i) {
+			students.remove(st[i]);
+		}
+
+		fireTableDataChanged();
+	}
+
 	// overrides for AbstractTableModel methods
 
 	public int getRowCount()
