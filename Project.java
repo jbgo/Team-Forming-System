@@ -28,6 +28,7 @@ class Project
 
 	Project()
 	{
+		skillsetPrototype = new SkillSet();
 	}
 
 	Project(String courseNumber, String projectName, SkillSet requiredSkills)
@@ -104,5 +105,16 @@ class Project
 	{
 		projectName = value;
 	}
+	
+	public String[] getSkillNames()
+	{
+		return skillsetPrototype.getNames();
+	}
+	
+	public void addPrototypeSkill(Skill s)
+	{
+		skillsetPrototype.add(s);
+	}
+	
 }
 

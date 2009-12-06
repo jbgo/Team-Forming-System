@@ -14,12 +14,16 @@ import java.util.Vector;
 import javax.swing.filechooser.FileFilter;
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.util.HashMap;
+import java.util.Iterator;
 
 public class TFSFrame extends JFrame implements ActionListener
 {
 	public final static long serialVersionUID = 1L;
 
 	private static TFSFrame instance = null;
+	
+	private static final String emailSuffix = "@utdallas.edu";
 
 	private Project currentProject;
 	private Screen currentScreen;
@@ -36,6 +40,8 @@ public class TFSFrame extends JFrame implements ActionListener
 
 	private JMenuItem menuImportStudents;
 	private JMenuItem menuImportRatings;
+	
+	private CreateProjectScreen cps;
 
 	// Implementing singleton design pattern, use TFSFrame.getInstance()
 	private TFSFrame()
@@ -156,6 +162,7 @@ public class TFSFrame extends JFrame implements ActionListener
 			importStudents();
 		} else if (source == menuImportRatings) {
 			setStatus("Import ratings");
+			importRatings();
 		}
 	}
 
@@ -180,7 +187,15 @@ public class TFSFrame extends JFrame implements ActionListener
 			Student s = new Student();
 			s.setLastName(fields[0]);
 			s.setFirstName(fields[1]);
-			s.setUtdEmail(fields[2] + "@utdallas.edu");
+			if (fields[2].matches("[@]"))
+			{
+				s.setUtdEmail(fields[2]);
+			}
+			else
+			{
+				System.out.println("WOOT");
+				s.setUtdEmail(fields[2] + emailSuffix);
+			}
 			students.add(s);
 		}
 		csv.close();
@@ -189,6 +204,148 @@ public class TFSFrame extends JFrame implements ActionListener
 		proj.addStudents(students);
 		currentScreen.reloadData(proj);
 		setStatus("Imported " + students.size() + " students");
+	}
+	
+	public void importRatings()
+	{
+		File csvFile = getCSVFile();
+		if (csvFile == null) {
+			setStatus("Import ratings: no file selected");
+			return;
+		}
+
+		CSVReader csv;
+		try {
+			csv = new CSVReader(csvFile);
+		} catch (FileNotFoundException ex) {
+			setStatus("Error: file not found: " + csvFile.getName());
+			return;
+		}
+
+		Project proj = getCurrentProject();
+		/*if(proj==null)
+		{
+			System.out.println("WTF Mate?");
+			System.exit(0);
+		}*/
+		Vector<String> skillNames = new Vector<String>();
+		Vector<String> newSkillNames = new Vector<String>();
+		if (csv.hasNextLine())
+		{
+			// Lets import the column specification and merge with root skills by name, default weight to 1
+			String[] fields = csv.nextLine();
+			
+			for(String field : fields)
+			{
+				if (field == null || field.matches("^\\s$"))
+				{
+					setStatus("Error: The header info for " + csvFile.getName() + " is incomplete.");
+					return;
+				}
+			}
+			if (fields.length < 2)
+			{
+				setStatus("Error: There are no skill headers in " + csvFile.getName());
+				return;
+			}
+			for(int index = 1; index < fields.length; index++)
+			{
+				skillNames.add(fields[index]);
+				newSkillNames.add(fields[index]);
+			}
+			String[] currentNames = proj.getSkillNames();
+			for(String name : currentNames)
+			{
+				if(newSkillNames.contains(name))
+				{
+					newSkillNames.remove(name);
+				}
+			}
+		}
+		HashMap<String, SkillSet> StuIDToSkillSets = new HashMap<String, SkillSet>();
+		for(Student s: proj.getStudents())
+		{
+			System.out.println(s.getUtdEmail());
+			StuIDToSkillSets.put(s.getUtdEmail(), s.getSkillSet());
+		}
+
+		Vector<String> nullStudents = new Vector<String>();
+		int lineNum = 1;
+		HashMap<SkillSet,Integer[]> commitHashMap = new HashMap<SkillSet, Integer[]>();
+		while (csv.hasNextLine()) {
+			lineNum++;
+			String[] fields = csv.nextLine();
+			if (!fields[0].matches("[@]"))
+			{
+				fields[0] += emailSuffix;
+			}
+			System.out.println(fields[0]);
+			SkillSet skill = StuIDToSkillSets.get(fields[0]);
+			if(skill == null)
+			{
+				nullStudents.add(fields[0]);
+			}
+			else
+			{
+				int fieldSizeDiff = skillNames.size() + 1 - fields.length;
+				if(fieldSizeDiff != 0)
+				{
+					setStatus("Import Ratings err: Line " + lineNum + " is missing " + fieldSizeDiff + " field(s)!");
+				}
+				Integer[] ratings = new Integer[fields.length - 1];
+				int currentIndex = 1;
+				try {
+					for(int index = 1; index < fields.length; index++)
+					{
+						currentIndex = index;
+						ratings[index - 1] = Integer.parseInt(fields[index]);
+					}
+				}
+				catch(Exception e)
+				{
+					setStatus("Import Ratings err: Line " + lineNum + " field " + currentIndex + " is not a number!");
+					return;
+				}
+				commitHashMap.put(skill, ratings);
+			}
+		}
+		csv.close();
+		
+		//Lets commit the changes loaded!
+		Iterator<SkillSet> it = commitHashMap.keySet().iterator();
+		while(it.hasNext())
+		{
+			SkillSet ss = it.next();
+			Integer[] ratings = commitHashMap.get(ss);
+			HashMap <String,Skill> skillsByName = new HashMap<String, Skill>();
+			for(Skill sk : ss.getSkills())
+			{
+				skillsByName.put(sk.getSkillName(), sk);
+			}
+			for(int index=0; index<skillNames.size();index++)
+			{
+				String name = skillNames.get(index);
+				Skill sk = skillsByName.get(name);
+				int rating = ratings[index];
+				if(sk == null)
+				{
+					ss.add(new Skill(name, 1, rating));
+				}
+				else
+				{
+					sk.setRating(rating);
+				}
+			}
+		}
+		
+		for(String newName : newSkillNames)
+		{
+			Skill s = new Skill(newName, 1);
+			proj.addPrototypeSkill(s);
+		}
+		currentScreen.reloadData(proj);
+		//setStatus("Imported " + students.size() + " students");
+		setStatus("Imported " + (lineNum - 1 - nullStudents.size()) + " student rating sets" + ((nullStudents.size()==0) ? (".") : (", " + nullStudents.size() + " students could not be matched!")));
 	}
 
 	private File getCSVFile() {
