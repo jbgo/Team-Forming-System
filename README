@@ -1,7 +1,125 @@
 Team Forming System
-
+ 
 Team 3
 Software Engineering
 UTD CS-3354-001 
 Fall 2009
+
+
+
+
+=====================
+= Important Details =
+=====================
+
+Original Version of Java used: (build 1.6.0_16-b01)
+
+
+To compile:
+  1) unzip Team-Forming-System.zip
+  2) change to the Team-Forming-System directory
+  3) javac -Xlint *.java
+
+  
+To run:
+  java TFSFrame
+
+  
+Usage:
+The Team Forming System consists of 3 screens. The Create Project
+screen, the Assign Students to Teams screen, and the Add/Edit Student
+Info screen.
+
+
+
+
+=============================
+= Step 0: Getting Acquanted =
+=============================
+
+When the program is first started, you are greeted in the very
+bottom of the screen by the Status text area. Within this text
+zone, important status information can be relayed to you instead
+of through a plethora of popup and dialog boxes. This zone persists
+throughout the execution of the program.
+
+
+At the top of the program is the File menu. After a project has
+been created, two new items appear under the new "Import" Menu Item.
+From here you can import a CSV of Users and then you can import a
+CSV of their skill Information.
+
+
+
+
+
+==============================
+= Step 1: Creating a Project =
+==============================
+
+This is the starting screen. You may optionally choose enter the
+course number and project name for this project. If you are going to
+manual rate skills for students, you must specify skills for this
+project. Use the "Add skill" button to create a new skill for the
+project. You can change the skill's name and weight by double clicking
+on the values in the table to make them editable. The weight must be
+an integer greater than or equal to 1. If you are planning to import
+student ratings, there is no need to create skills on this screen.
+When you are satisfied, click "Create project" to proceed to the next
+screen.
+
+
+
+
+=======================================
+= Step 2: Assigning Students to Teams =
+=======================================
+
+To use this screen you must first create a list of students and rate
+those students. Once you have a list of students and their ratings,
+you may assign them to teams. After you have assigned students to
+teams, you may view individual teams.
+
+There are two ways to create a list of students: manually and by
+importing CSV files. To import students manually, you simply click the
+"Add" button at the bottom of the screen and fill in the Add/Edit
+Student screen that appears. You may add as many students to a project
+as you like. You may also edit or remove students by first selecting a
+row in the table and clicking either the "Edit" or "Remove" buttons.
+
+To import a list students from a CSV file, select "File > Import >
+Students" from the program menu and choose a CSV file on your
+computer. If it is in the proper format, the program will load all of
+the students and you will seem them appear in the table. You can
+follow a similar procedure to import ratings after you have imported
+the students by selecting "File > Import > Ratings." We have included
+some sample .csv files with the program source code for you to use or
+inspect.
+
+Once you have students and ratings entered, you can assign the
+students to teams. First select a minimum team size from the "Team
+size" drop down menu. All teams will be at least as many people on the
+team as specified by team size, but teams will have not more than team
+size + 1 people on each team. In other words, selecting a team size of
+4 means there may be either 4 or 5 people on each team. Next you
+select a team assignment method from the "Assignment method" drop down
+menu to determine how teams are chosen. Finally, click the "Assign
+Teams" button to assign students to teams. You may try different team
+sizes and methods until you are happy with the chosen teams.
+
+After the teams have been assigned you may select a particular team to
+view from the "View team" drop down menu. When you select a team from
+this menu, only students on that team will be shown in the table.
+
+
+
+
+============================================
+= Optional Step 3: Add/Edit Student screen =
+============================================
+
+This screen allows you to edit details about a student such as their
+name, UTD email, and skill ratings.
+
+
 
