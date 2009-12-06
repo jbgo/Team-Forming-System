@@ -44,11 +44,27 @@ public class AssignTeamsScreen extends Screen implements ActionListener
 	public void buildPanel()
 	{
 		JPanel col = GuiHelpers.column();
-		col.add(new JLabel("Team size"));
-		col.add(teamSizeCombo);
-		col.add(new JLabel("Assignment method"));
-		col.add(assignMethodCombo);
-		col.add(assignButton);
+
+		JPanel row = GuiHelpers.row();
+		row.add(new JLabel("Team size: "));
+		teamSizeCombo.setMaximumSize(teamSizeCombo.getPreferredSize());
+		row.add(teamSizeCombo);
+		row.add(Box.createHorizontalGlue());
+		col.add(row);
+
+		row = GuiHelpers.row();
+		row.add(new JLabel("Assignment method: "));
+		assignMethodCombo.setMaximumSize(assignMethodCombo.getPreferredSize());
+		row.add(assignMethodCombo);
+		row.add(Box.createHorizontalGlue());
+		col.add(row);
+
+		row = GuiHelpers.row();
+		row.add(assignButton);
+		row.add(Box.createHorizontalGlue());
+		col.add(row);
+
+		col.add(GuiHelpers.margin(0,20));
 		col.add(studentPanel);
 		add(col);
 	}
