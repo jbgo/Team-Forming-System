@@ -137,26 +137,53 @@ public class EditStudentScreen extends Screen implements ActionListener
 
 	private void buildPanel()
 	{
-		JPanel tempColumn = GuiHelpers.column();
-		tempColumn.add(new JLabel("First name: "));
-		tempColumn.add(firstNameField);
-		tempColumn.add(new JLabel("Last name: "));
-		tempColumn.add(lastNameField);
-		tempColumn.add(new JLabel("UTD email: "));
-		tempColumn.add(emailField);
-		tempColumn.add(new JLabel("Phone: "));
-		tempColumn.add(phoneField);
-		tempColumn.add(new JLabel("GPA: "));
-		tempColumn.add(GPAField);
-		tempColumn.add(updateButton);
-		tempColumn.add(cancelButton);
+		JPanel row;
+		JPanel alignColumn = GuiHelpers.column();
+		JPanel layoutColumn = GuiHelpers.column();
+		
+		row = GuiHelpers.row();
+		row.add(new JLabel("First name: "));
+		row.add(firstNameField);
+		row.add(Box.createHorizontalGlue());
+		alignColumn.add(row);
+
+		row = GuiHelpers.row();
+		row.add(new JLabel("Last name: "));
+		row.add(lastNameField);
+		row.add(Box.createHorizontalGlue());
+		alignColumn.add(row);
+
+		row = GuiHelpers.row();
+		row.add(new JLabel("UTD email: "));
+		row.add(emailField);
+		row.add(Box.createHorizontalGlue());
+		alignColumn.add(row);
+
+		row = GuiHelpers.row();
+		row.add(new JLabel("Phone: "));
+		row.add(phoneField);
+		row.add(Box.createHorizontalGlue());
+		alignColumn.add(row);
+
+		row = GuiHelpers.row();
+		row.add(new JLabel("GPA: "));
+		row.add(GPAField);
+		row.add(Box.createHorizontalGlue());
+		alignColumn.add(row);
+
+		layoutColumn.add(alignColumn);
 		
 		Skill[] skills = student.getSkills();
 		for (int i = 0; i < skills.length; i++) {
-			tempColumn.add(new SkillPanel(skills[i]));
+			layoutColumn.add(new SkillPanel(skills[i]));
 		}
 
-		add(tempColumn);
+		row = GuiHelpers.row();
+		row.add(updateButton);
+		row.add(cancelButton);
+		layoutColumn.add(row);
+
+		add(layoutColumn);
 	}
 
 	private void prePopulateFields()

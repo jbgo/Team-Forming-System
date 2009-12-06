@@ -71,7 +71,6 @@ public class CreateProjectScreen extends Screen implements ActionListener
 		courseNumber.setMaximumSize(courseNumber.getPreferredSize());
 		row1.add(courseNumber);
 		row1.add(Box.createHorizontalGlue());
-		row1.add(createButton);
 
 		JPanel row2 = GuiHelpers.row();
 		row2.add(GuiHelpers.margin(5,0));
@@ -79,6 +78,7 @@ public class CreateProjectScreen extends Screen implements ActionListener
 		row2.add(projectName);
 		projectName.setMaximumSize(projectName.getPreferredSize());
 		row2.add(Box.createHorizontalGlue());
+		row2.add(createButton);
 
 		JPanel vertPanel = GuiHelpers.column();
 		setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
