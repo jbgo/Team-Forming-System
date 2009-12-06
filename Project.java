@@ -105,22 +105,6 @@ class Project
 		students.removeAllElements();
 	}
 
-	public void removeStudentFromProject(Student student)
-	{
-	}
-
-	public void assignStudentsToTeams(int minTeamSize, AssignmentMethod method)
-	{
-	}
-
-	public void assignStudentToTeam(Student student, int teamNumber)
-	{
-	}
-
-	public void removeStudentFromTeam(Student student, int teamNumber)
-	{
-	}
-
 	public int getNumStudents()
 	{
 		return students.size();
@@ -131,11 +115,17 @@ class Project
 		return students;
 	}
 
-	public Team[] getTeams()
+	public Vector<Team> getTeams()
 	{
-		Team[] arrTeam = new Team[teams.size()];
-		arrTeam = teams.toArray(arrTeam);
-		return arrTeam;
+//		Team[] arrTeam = new Team[teams.size()];
+//		arrTeam = teams.toArray(arrTeam);
+//		return arrTeam;
+		return teams;
+	}
+
+	public void setTeams(Vector<Team> teams)
+	{
+		this.teams = teams;
 	}
 
 	public String getName()

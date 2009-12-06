@@ -39,6 +39,7 @@ public class CreateProjectScreen extends Screen implements ActionListener
 
 			mainFrame.setCurrentProject(proj);
 			mainFrame.setStatus("Created project: " + projName);
+			mainFrame.enableImportMenu();
 			mainFrame.setScreen(new AssignTeamsScreen(proj));
 		}
 	}

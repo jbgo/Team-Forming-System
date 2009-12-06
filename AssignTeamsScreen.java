@@ -11,8 +11,11 @@ public class AssignTeamsScreen extends Screen implements ActionListener
 	private JButton assignButton;
 	private JComboBox teamSizeCombo;
 	private JComboBox assignMethodCombo;
+	private JComboBox viewTeamsCombo;
 	private StudentsPanel studentPanel;
 	private TFSFrame mainFrame;
+	private int minTeamSize = 2;
+	private int selectedTeamNumber = 0;
 
 	private String[] assignMethods = {
 		"Random", "Similar skills", "Range of skills", "Average GPA"
@@ -36,6 +39,9 @@ public class AssignTeamsScreen extends Screen implements ActionListener
 
 		assignMethodCombo = new JComboBox();
 		initAssignMethodCombo();
+
+		viewTeamsCombo = new JComboBox();
+		initViewTeamsCombo();
 
 		assignButton = new JButton("Assign Teams");
 		assignButton.addActionListener(this);
@@ -64,6 +70,13 @@ public class AssignTeamsScreen extends Screen implements ActionListener
 		row.add(Box.createHorizontalGlue());
 		col.add(row);
 
+		row = GuiHelpers.row();
+		row.add(Box.createHorizontalGlue());
+		row.add(new JLabel("View team: "));
+		viewTeamsCombo.setMaximumSize(viewTeamsCombo.getPreferredSize());
+		row.add(viewTeamsCombo);
+		col.add(row);
+
 		col.add(GuiHelpers.margin(0,20));
 		col.add(studentPanel);
 		add(col);
@@ -78,6 +91,7 @@ public class AssignTeamsScreen extends Screen implements ActionListener
 	{
 		project = proj;
 		updateTeamSize();
+		updateViewTeamsCombo();
 		studentPanel.reloadData();
 	}
 
@@ -86,6 +100,8 @@ public class AssignTeamsScreen extends Screen implements ActionListener
 		Object source = e.getSource();
 		if (source == assignButton) {
 			doTeamAssignments();
+		} else if (source == viewTeamsCombo) {
+			showSelectedTeam();
 		}
 	}
 
@@ -108,7 +124,7 @@ public class AssignTeamsScreen extends Screen implements ActionListener
 		method = methodTypes[methodIndex];
 		project.setAssignmentMethod(method);
 
-		int minTeamSize = (Integer)teamSizeCombo.getSelectedItem();
+		minTeamSize = (Integer)teamSizeCombo.getSelectedItem();
 		project.setMinTeamSize(minTeamSize);
 
 		assigner = TeamAssigner.getInstance(method);
@@ -119,6 +135,8 @@ public class AssignTeamsScreen extends Screen implements ActionListener
 			mainFrame.showError(ex.getMessage());
 			return;
 		}
+
+		project.setTeams(newTeams);
 
 		project.removeAllStudents();
 		for (int i = 0; i < newTeams.size(); i++) {
@@ -149,6 +167,10 @@ public class AssignTeamsScreen extends Screen implements ActionListener
 		for (int i = low; i <= high; i++) {
 			teamSizeCombo.addItem(i);
 		}
+
+		if (minTeamSize >= low && minTeamSize <= high) {
+			teamSizeCombo.setSelectedIndex(minTeamSize - low);
+		}
 	}
 
 	private void initAssignMethodCombo()
@@ -156,6 +178,70 @@ public class AssignTeamsScreen extends Screen implements ActionListener
 		for (int i = 0; i < assignMethods.length; i++) {
 			assignMethodCombo.addItem(assignMethods[i]);
 		}
+	}
+
+	private void initViewTeamsCombo()
+	{
+		viewTeamsCombo.addActionListener(this);
+		updateViewTeamsCombo();
+	}
+
+	private void updateViewTeamsCombo()
+	{
+		viewTeamsCombo.removeAllItems();
+		viewTeamsCombo.addItem("All Teams");
+
+		Vector<Team> teams = project.getTeams();
+		for (int i = 1; i <= teams.size(); i++) {
+			viewTeamsCombo.addItem("Team " + i);
+		}
+
+		if (selectedTeamNumber >= 0 && selectedTeamNumber < teams.size()) {
+			viewTeamsCombo.setSelectedIndex(selectedTeamNumber);
+		}
+	}
+
+	private void showSelectedTeam()
+	{
+		int teamNo = viewTeamsCombo.getSelectedIndex();
+		Vector<Team> teams = project.getTeams();
+
+		selectedTeamNumber = teamNo;
+
+		if (teams.size() < 2) {
+			// mainFrame.showError("No teams to choose from");
+			return;
+		}
+		
+		if (teamNo == 0) {
+			project.removeAllStudents();
+			for (Team t : teams) {
+				for (Student s : t.getStudents()) {
+					project.addStudent(s);
+				}
+			}
+			mainFrame.setStatus("Showing all students");
+		}
+
+		Vector<Student> students = project.getStudents();
+		Team team = null;
+		for (Team t : teams) {
+			if (t.getStudents()[0].getTeamNumber() == teamNo) {
+				team = t;
+				break;
+			}
+		}
+
+		if (team == null) { // show all teams
+			// mainFrame.showError("Could not find team #" + teamNo);
+		} else {
+			project.removeAllStudents();
+			for (Student s : team.getStudents()) {
+				project.addStudent(s);
+			}
+			mainFrame.setStatus("Showing students in team #" + teamNo);
+		}
+		studentPanel.reloadData();
 	}
 }
 
@@ -221,9 +307,18 @@ class StudentsPanel extends JPanel implements ActionListener
 			parentScreen.updateTeamSize();
 		} else if (source == editStudent) {
 			int index = table.getSelectedRow();
+			if (index < 0) {
+				mainFrame.setStatus("You must select a row to edit first");
+				return;
+			}
 			Student s = model.getStudentForRow(index);
 			mainFrame.setScreen(new EditStudentScreen(parentScreen, s, false));
 		} else if (source == removeStudents) {
+			int[] selRows = table.getSelectedRows();
+			if (selRows.length == 0) {
+				mainFrame.setStatus("You must select a row to remove first");
+				return;
+			}
 			model.removeSelectedStudents(table.getSelectedRows());
 			parentScreen.updateTeamSize();
 		}

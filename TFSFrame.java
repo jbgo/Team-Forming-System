@@ -46,6 +46,7 @@ public class TFSFrame extends JFrame implements ActionListener
 	private JMenuItem menuClose;
 	private JMenuItem menuExit;
 
+	private JMenu importMenu;
 	private JMenuItem menuImportStudents;
 	private JMenuItem menuImportRatings;
 	
@@ -100,6 +101,11 @@ public class TFSFrame extends JFrame implements ActionListener
 		currentScreen.reloadData(proj);
 	}
 
+	public void enableImportMenu()
+	{
+		importMenu.setEnabled(true);
+	}
+
 	private void BuildFrame()
 	{
 		BuildMenu();
@@ -128,9 +134,10 @@ public class TFSFrame extends JFrame implements ActionListener
 		menuClose = new JMenuItem("Close");
 		menuExit = new JMenuItem("Exit");
 
-		JMenu importMenu = new JMenu("Import");
+		importMenu = new JMenu("Import");
 		menuImportStudents = new JMenuItem("Students");
 		menuImportRatings = new JMenuItem("Ratings");
+		importMenu.setEnabled(false);
 		
 		importMenu.add(menuImportStudents);
 		importMenu.add(menuImportRatings);
