@@ -24,7 +24,15 @@ public class TFSFrame extends JFrame implements ActionListener
 	private static TFSFrame instance = null;
 	
 	private static final String emailSuffix = "@utdallas.edu";
-
+	
+	private static final String[] validUserHeaders = new String[]{
+		"Last Name",
+		"First Name",
+		"User ID",
+		"Role",
+		"GPA"
+	};
+	
 	private Project currentProject;
 	private Screen currentScreen;
 
@@ -41,8 +49,6 @@ public class TFSFrame extends JFrame implements ActionListener
 	private JMenuItem menuImportStudents;
 	private JMenuItem menuImportRatings;
 	
-	private CreateProjectScreen cps;
-
 	// Implementing singleton design pattern, use TFSFrame.getInstance()
 	private TFSFrame()
 	{
@@ -182,24 +188,93 @@ public class TFSFrame extends JFrame implements ActionListener
 		}
 
 		Vector<Student> students = new Vector<Student>();
+		
+		HashMap<String,Integer> fieldLocations = new HashMap<String,Integer>();
 
 		if (csv.hasNextLine()) {
-			csv.nextLine(); // skip header row
+			for(String string : validUserHeaders)
+			{
+				fieldLocations.put(string,-1);
+			}
+			Integer index = -1;
+			for (String field : csv.nextLine())
+			{
+				index++;
+				Integer i = fieldLocations.get(field);
+				if(i == null)
+				{
+					setStatus("Import Users err: Failed to identify field \"" + field + "\" as a valid header!");
+					return;
+				}
+				else if(i != -1)
+				{
+					setStatus("The field \"" + field + "\" is a repeated header!");
+					return;
+				}
+				fieldLocations.put(field, index);
+			}
 		}
-
+		
+		int lineNum = 1;
 		while (csv.hasNextLine()) {
+			lineNum++;
 			String[] fields = csv.nextLine();
 
 			Student s = new Student();
-			s.setLastName(fields[0]);
-			s.setFirstName(fields[1]);
-
-			if (fields[2].matches("[@]")) {
-				s.setUtdEmail(fields[2]);
-			} else {
-				System.out.println("WOOT");
-				s.setUtdEmail(fields[2] + emailSuffix);
+			Integer index = fieldLocations.get(validUserHeaders[0]);
+			if (index > -1)
+			{
+				s.setLastName(fields[index]);
 			}
+			else
+			{
+				setStatus("Failed to find header \"" + validUserHeaders[0] + "\"");
+				return;
+			}
+			index = fieldLocations.get(validUserHeaders[1]);
+			if (index > -1)
+			{
+				s.setFirstName(fields[index]);
+			}
+			else
+			{
+				setStatus("Failed to find header \"" + validUserHeaders[1] + "\"");
+				return;
+			}
+			index = fieldLocations.get(validUserHeaders[2]);
+			if (index > -1)
+			{
+				if (fields[index].matches("[@]")) {
+					s.setUtdEmail(fields[2]);
+				} else {
+					//System.out.println("WOOT");
+					s.setUtdEmail(fields[2] + emailSuffix);
+				}
+			}
+			else
+			{
+				setStatus("Failed to find header \"" + validUserHeaders[3] + "\"");
+				return;
+			}
+			
+			//Skip header type 3, it is a dummy
+			
+			index = fieldLocations.get(validUserHeaders[4]);
+			if (index > -1)
+			{
+				double GPA=0;
+				try
+				{
+					GPA = Double.parseDouble(fields[index]);
+				}
+				catch(Exception e)
+				{
+					setStatus("ERR: Failed to interpret the GPA of student on line " + lineNum);
+				}
+				s.setGPA(GPA);
+				//System.out.println(GPA);
+			}
+			//OPTIONAL!
 
 			if (currentProject != null) {
 				s.setSkillSet(currentProject.getRequiredSkills());
@@ -274,7 +349,7 @@ public class TFSFrame extends JFrame implements ActionListener
 		HashMap<String, SkillSet> StuIDToSkillSets = new HashMap<String, SkillSet>();
 		for(Student s: proj.getStudents())
 		{
-			System.out.println(s.getUtdEmail());
+			//System.out.println(s.getUtdEmail());
 			StuIDToSkillSets.put(s.getUtdEmail(), s.getSkillSet());
 		}
 
@@ -288,7 +363,7 @@ public class TFSFrame extends JFrame implements ActionListener
 			{
 				fields[0] += emailSuffix;
 			}
-			System.out.println(fields[0]);
+			//System.out.println(fields[0]);
 			SkillSet skill = StuIDToSkillSets.get(fields[0]);
 			if(skill == null)
 			{
