@@ -21,6 +21,12 @@ public class StudentsTableModel extends AbstractTableModel
 		fireTableDataChanged();
 	}
 
+	public void setStudents(Vector<Student> studentList)
+	{
+		students = studentList;
+		fireTableDataChanged();
+	}
+
 	public Student getStudentForRow(int row)
 	{
 		return students.get(row);
