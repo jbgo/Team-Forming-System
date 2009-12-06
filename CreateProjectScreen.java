@@ -48,6 +48,11 @@ public class CreateProjectScreen extends Screen implements ActionListener
 		return "Create Project";
 	}
 
+	public void reloadData(Project proj)
+	{
+		skillsPanel.setSkillSet(proj.getRequiredSkills());
+	}
+
 	private void initComponents()
 	{
 		courseNumber = new JTextField(20);
@@ -129,6 +134,11 @@ class CreateSkillsPanel extends JPanel implements ActionListener
 	public SkillSet getSkillSet()
 	{
 		return model.getSkillSet();
+	}
+
+	public void setSkillSet(SkillSet skills)
+	{
+		model.setSkillSet(skills);
 	}
 }
 

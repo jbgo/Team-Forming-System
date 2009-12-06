@@ -37,6 +37,12 @@ public class CreateSkillsTableModel extends AbstractTableModel
 		return skills;
 	}
 
+	public void setSkillSet(SkillSet ss)
+	{
+		skills = ss;
+		fireTableDataChanged();
+	}
+
 	// AbstractTableModel overrides
 
 	public int getRowCount()
