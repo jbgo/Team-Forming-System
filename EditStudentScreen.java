@@ -229,7 +229,7 @@ class SkillPanel extends JPanel implements ActionListener
 		}
 
 		int rating = skill.getRating();
-		if (rating != -1) {
+		if (rating > 0) {
 			buttons.setSelected(radios[rating-1].getModel(), true);
 		}
 	}
