@@ -190,16 +190,15 @@ public class TFSFrame extends JFrame implements ActionListener
 		Vector<Student> students = new Vector<Student>();
 		
 		HashMap<String,Integer> fieldLocations = new HashMap<String,Integer>();
-
+		int numFields = 0;
 		if (csv.hasNextLine()) {
 			for(String string : validUserHeaders)
 			{
 				fieldLocations.put(string,-1);
 			}
-			Integer index = -1;
+			Integer index = 0;
 			for (String field : csv.nextLine())
 			{
-				index++;
 				Integer i = fieldLocations.get(field);
 				if(i == null)
 				{
@@ -208,17 +207,26 @@ public class TFSFrame extends JFrame implements ActionListener
 				}
 				else if(i != -1)
 				{
-					setStatus("The field \"" + field + "\" is a repeated header!");
+					setStatus("Import Users err: The field \"" + field + "\" is a repeated header!");
 					return;
 				}
 				fieldLocations.put(field, index);
+				index++;
 			}
+			numFields = index;
 		}
 		
 		int lineNum = 1;
 		while (csv.hasNextLine()) {
 			lineNum++;
 			String[] fields = csv.nextLine();
+			
+			int diffFieldNum = numFields - fields.length;
+			if(diffFieldNum != 0)
+			{
+				setStatus("Import Users err: Line " + lineNum + " is missing " + diffFieldNum + " field(s)!");
+				return;
+			}
 
 			Student s = new Student();
 			Integer index = fieldLocations.get(validUserHeaders[0]);
@@ -228,7 +236,7 @@ public class TFSFrame extends JFrame implements ActionListener
 			}
 			else
 			{
-				setStatus("Failed to find header \"" + validUserHeaders[0] + "\"");
+				setStatus("Import Users err: Failed to find header \"" + validUserHeaders[0] + "\"");
 				return;
 			}
 			index = fieldLocations.get(validUserHeaders[1]);
@@ -238,7 +246,7 @@ public class TFSFrame extends JFrame implements ActionListener
 			}
 			else
 			{
-				setStatus("Failed to find header \"" + validUserHeaders[1] + "\"");
+				setStatus("Import Users err: Failed to find header \"" + validUserHeaders[1] + "\"");
 				return;
 			}
 			index = fieldLocations.get(validUserHeaders[2]);
@@ -253,7 +261,7 @@ public class TFSFrame extends JFrame implements ActionListener
 			}
 			else
 			{
-				setStatus("Failed to find header \"" + validUserHeaders[3] + "\"");
+				setStatus("Import Users err: Failed to find header \"" + validUserHeaders[3] + "\"");
 				return;
 			}
 			
@@ -269,7 +277,8 @@ public class TFSFrame extends JFrame implements ActionListener
 				}
 				catch(Exception e)
 				{
-					setStatus("ERR: Failed to interpret the GPA of student on line " + lineNum);
+					setStatus("Import Users err: Failed to interpret the GPA of student on line " + lineNum);
+					return;
 				}
 				s.setGPA(GPA);
 				//System.out.println(GPA);
@@ -375,6 +384,7 @@ public class TFSFrame extends JFrame implements ActionListener
 				if(fieldSizeDiff != 0)
 				{
 					setStatus("Import Ratings err: Line " + lineNum + " is missing " + fieldSizeDiff + " field(s)!");
+					return;
 				}
 				Integer[] ratings = new Integer[fields.length - 1];
 				int currentIndex = 1;

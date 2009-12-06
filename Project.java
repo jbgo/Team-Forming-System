@@ -13,6 +13,8 @@ assignStudentsToTeams() before he can make individual team assignments.
 */
 
 import java.util.Vector;
+import java.util.HashMap;
+import java.util.Iterator;
 
 class Project
 {
@@ -56,6 +58,36 @@ class Project
 	public void setRequiredSkills(SkillSet requiredSkills)
 	{
 		skillsetPrototype = requiredSkills;
+		HashMap<String,Skill> prototypeSkillsByName = new HashMap<String,Skill>();
+		for(Skill s : skillsetPrototype.getSkills())
+		{
+			prototypeSkillsByName.put(s.getSkillName(), s);
+		}
+		for(Student s : students)
+		{
+			HashMap<String,Skill> studentSkillsByName = new HashMap<String,Skill>();
+			for(Skill sk : s.getSkills())
+			{
+				studentSkillsByName.put(sk.getSkillName(), sk);
+			}
+			Iterator<String> it = prototypeSkillsByName.keySet().iterator();
+			while (it.hasNext())
+			{
+				String key = it.next();
+				Skill pk = prototypeSkillsByName.get(key);
+				Skill sk = studentSkillsByName.get(key);
+				if(sk == null)
+				{
+					sk = new Skill(key, pk.getWeight(), pk.getRating());
+					studentSkillsByName.put(key, sk);
+					s.addSkill(sk);
+				}
+				else
+				{
+					sk.setWeight(pk.getWeight());
+				}
+			}
+		}
 	}
 
 	public void addStudent(Student st)
